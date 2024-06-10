@@ -11,8 +11,6 @@ public class EnlaceController {
 	@GetMapping("/enlace/{num}")
 	public String enlace(Model model, @PathVariable String num) {
 
-        model.addAttribute("xs", "Holas");
-
 		model.addAttribute("num", num);
 
 		return "enlace";

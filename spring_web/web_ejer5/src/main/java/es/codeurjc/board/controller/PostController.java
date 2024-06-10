@@ -1,15 +1,11 @@
 package es.codeurjc.board.controller;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import es.codeurjc.board.model.Post;
 import es.codeurjc.board.service.PostService;
@@ -21,13 +17,10 @@ public class PostController {
 	private PostService postService;
 
 	@GetMapping("/")
-	public String showPosts(Model model, @RequestParam(required = false) String usuario) {
+	public String showPosts(Model model) {
 
-		Collection<Post> posts = postService.findAll();
+		model.addAttribute("posts", postService.findAll());
 
-		if(usuario != null) posts = posts.stream().filter(p -> p.getUser().equals(usuario)).toList();
-
-		model.addAttribute("posts", posts);
 		return "index";
 	}
 

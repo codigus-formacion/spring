@@ -20,7 +20,7 @@ public class MustacheController {
 	public String basic(Model model) {
 
 		model.addAttribute("name", "World");
-		model.addAttribute("hello", false);
+		model.addAttribute("hello", true);
 
 		return "basic_template";
 	}
