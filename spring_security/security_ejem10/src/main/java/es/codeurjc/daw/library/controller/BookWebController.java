@@ -53,7 +53,7 @@ public class BookWebController {
 			model.addAttribute("book", book.get());
 			return "book";
 		} else {
-			return "books";
+			return "redirect:/";
 		}
 
 	}
@@ -65,13 +65,14 @@ public class BookWebController {
 		if (book.isPresent()) {
 			service.delete(id);
 			model.addAttribute("book", book.get());
+			return "removedbook";
+		}else{
+			return "redirect:/";
 		}
-		return "removedbook";
 	}
 
 	@GetMapping("/newbook")
 	public String newBook(Model model) {
-
 		return "newBookPage";
 	}
 
@@ -93,7 +94,7 @@ public class BookWebController {
 			model.addAttribute("book", book.get());
 			return "editBookPage";
 		} else {
-			return "books";
+			return "redirect:/";
 		}
 	}
 
