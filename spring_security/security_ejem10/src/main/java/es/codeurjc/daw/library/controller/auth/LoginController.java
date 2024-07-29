@@ -12,35 +12,32 @@ import es.codeurjc.daw.library.security.jwt.AuthResponse;
 import es.codeurjc.daw.library.security.jwt.AuthResponse.Status;
 import es.codeurjc.daw.library.security.jwt.LoginRequest;
 import es.codeurjc.daw.library.security.jwt.UserLoginService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/auth")
 public class LoginController {
-
+	
 	@Autowired
 	private UserLoginService userService;
 
 	@PostMapping("/login")
 	public ResponseEntity<AuthResponse> login(
-			@CookieValue(name = "accessToken", required = false) String accessToken,
-			@CookieValue(name = "refreshToken", required = false) String refreshToken,
-			@RequestBody LoginRequest loginRequest) {
+			@RequestBody LoginRequest loginRequest,
+			HttpServletResponse response) {
 		
-		return userService.login(loginRequest, accessToken, refreshToken);
+		return userService.login(response, loginRequest);
 	}
 
 	@PostMapping("/refresh")
 	public ResponseEntity<AuthResponse> refreshToken(
-			@CookieValue(name = "refreshToken", required = false) String refreshToken) {
+			@CookieValue(name = "RefreshToken", required = false) String refreshToken, HttpServletResponse response) {
 
-		return userService.refresh(refreshToken);
+		return userService.refresh(response, refreshToken);
 	}
 
 	@PostMapping("/logout")
-	public ResponseEntity<AuthResponse> logOut(HttpServletRequest request, HttpServletResponse response) {
-
-		return ResponseEntity.ok(new AuthResponse(Status.SUCCESS, userService.logout(request, response)));
+	public ResponseEntity<AuthResponse> logOut(HttpServletResponse response) {
+		return ResponseEntity.ok(new AuthResponse(Status.SUCCESS, userService.logout(response)));
 	}
 }

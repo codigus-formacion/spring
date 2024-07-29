@@ -1,5 +1,6 @@
 package es.codeurjc.daw.library.controller.auth;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +17,9 @@ import jakarta.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api/auth")
 public class LoginController {
-
-	private final UserLoginService userService;
-
-	public LoginController(UserLoginService userService) {
-		this.userService = userService;
-	}
+	
+	@Autowired
+	private UserLoginService userService;
 
 	@PostMapping("/login")
 	public ResponseEntity<AuthResponse> login(
