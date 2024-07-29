@@ -8,11 +8,8 @@
   <p>
     {{#logged}}
     
-    {{#admin}}
-    <form action="/removebook/{{book.id}}" method="post">
-      <input type="submit" value="Remove">
-      <input type="hidden" name="_csrf" value="{{token}}"/>
-    </form>
+    	{{#admin}}
+		<button onclick="location.href='/removebook/{{book.id}}'">Remove</button>
 		{{/admin}}
     
     	<button onclick="location.href='/editbook/{{book.id}}'">Edit</button>

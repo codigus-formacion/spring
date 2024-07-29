@@ -58,7 +58,7 @@ public class BookWebController {
 
 	}
 
-	@PostMapping("/removebook/{id}")
+	@GetMapping("/removebook/{id}")
 	public String removeBook(Model model, @PathVariable long id) {
 
 		Optional<Book> book = service.findById(id);
