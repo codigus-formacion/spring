@@ -6,7 +6,9 @@
 	
 	<img src="/post/{{post.id}}/image"></img>
 	
-	<a href="/post/{{post.id}}/delete">Delete post</a>
+	<form action="/post/{{post.id}}/delete" method="post">
+		<input type='submit' value='Delete Post'/>
+	</form>
 	
 	<br>
 	

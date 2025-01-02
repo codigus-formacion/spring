@@ -46,7 +46,7 @@ public class PostController {
 		return "show_post";
 	}
 	
-	@GetMapping("/post/{numPost}/delete")
+	@PostMapping("/post/{numPost}/delete")
 	public String deletePost(Model model, @PathVariable int numPost) {
 
 		posts.remove(numPost - 1);

@@ -41,12 +41,13 @@ public class PostController {
 
 		return "show_post";
 	}
-	
-	@GetMapping("/post/{id}/delete")
+
+	@PostMapping("/post/{id}/delete")
 	public String deletePost(Model model, @PathVariable long id) {
 
 		postService.deleteById(id);
 
 		return "deleted_post";
 	}
+	
 }

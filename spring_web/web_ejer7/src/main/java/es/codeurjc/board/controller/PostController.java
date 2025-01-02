@@ -80,12 +80,12 @@ public class PostController {
 
 		return imageService.createResponseFromImage(POSTS_FOLDER, id);		
 	}
-	
-	@GetMapping("/post/{id}/delete")
+
+	@PostMapping("/post/{id}/delete")
 	public String deletePost(Model model, @PathVariable long id) throws IOException {
 
 		postService.deleteById(id);
-		
+
 		imageService.deleteImage(POSTS_FOLDER, id);
 
 		return "deleted_post";
