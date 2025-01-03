@@ -41,7 +41,6 @@ public class PostController {
 			model.addAttribute("post", post);
 			return "show_post";	
 		} else {
-			// return "redirect:/";
 			return "post_not_found";
 		}
 	}

@@ -6,10 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 @Entity
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Student {
 
 	@Id
@@ -25,10 +22,10 @@ public class Student {
 	protected Student() {
 	}
 
-	public Student(String name, int year) {
+	public Student(String name, int startYear) {
 		super();
 		this.name = name;
-		this.startYear = year;
+		this.startYear = startYear;
 	}
 
 	public long getId() {
@@ -65,7 +62,7 @@ public class Student {
 
 	@Override
 	public String toString() {
-		return "Student [id=" + id + ", name=" + name + ", startYear=" + startYear + "]";
+		return "Student [id=" + id + ", name=" + name + ", startYear=" + startYear + ", project="+project+"]";
 	}
 
 }
