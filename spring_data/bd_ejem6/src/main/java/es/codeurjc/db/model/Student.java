@@ -1,6 +1,5 @@
 package es.codeurjc.db.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,10 +22,10 @@ public class Student {
 	protected Student() {
 	}
 
-	public Student(String name, int year) {
+	public Student(String name, int startYear) {
 		super();
 		this.name = name;
-		this.startYear = year;
+		this.startYear = startYear;
 	}
 
 	public long getId() {
@@ -49,8 +48,8 @@ public class Student {
 		return startYear;
 	}
 
-	public void setStartYear(int year) {
-		this.startYear = year;
+	public void setStartYear(int startYear) {
+		this.startYear = startYear;
 	}
 
 	public Project getProject() {
@@ -63,7 +62,7 @@ public class Student {
 
 	@Override
 	public String toString() {
-		return "Student [id=" + id + ", name=" + name + ", startYear=" + startYear + "]";
+		return "Student [id=" + id + ", name=" + name + ", startYear=" + startYear + ", project="+project+"]";
 	}
 
 }

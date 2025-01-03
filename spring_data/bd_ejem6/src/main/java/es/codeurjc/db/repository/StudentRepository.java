@@ -1,4 +1,4 @@
-package es.codeurjc.db;
+package es.codeurjc.db.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
