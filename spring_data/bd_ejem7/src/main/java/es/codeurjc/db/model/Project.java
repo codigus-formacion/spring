@@ -6,26 +6,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 @Entity
 public class Project {
-	
-	public interface BasicAtt {}
-	public interface StudentAtt {}
 
-	@JsonView(BasicAtt.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	long id;
 
-	@JsonView(BasicAtt.class)
 	private String title;
-	
-	@JsonView(BasicAtt.class)
 	private int calification;
 
-	@JsonView(StudentAtt.class)
 	@OneToOne(mappedBy = "project")
 	private Student student;
 

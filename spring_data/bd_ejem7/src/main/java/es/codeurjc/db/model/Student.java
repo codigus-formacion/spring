@@ -7,36 +7,26 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 @Entity
 public class Student {
 
-	public interface BasicAtt {}
-	public interface ProjectAtt {}
-	
-	@JsonView(BasicAtt.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@JsonView(BasicAtt.class)
 	private String name;
-	
-	@JsonView(BasicAtt.class)
 	private int startYear;
 
-	@JsonView(ProjectAtt.class)
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL)
 	private Project project;
 
 	protected Student() {
 	}
 
-	public Student(String name, int year) {
+	public Student(String name, int startYear) {
 		super();
 		this.name = name;
-		this.startYear = year;
+		this.startYear = startYear;
 	}
 
 	public long getId() {
@@ -73,7 +63,7 @@ public class Student {
 
 	@Override
 	public String toString() {
-		return "Player [id=" + id + ", name=" + name + ", startYear=" + startYear + "]";
+		return "Student [id=" + id + ", name=" + name + ", startYear=" + startYear + ", project="+project+"]";
 	}
 
 }
