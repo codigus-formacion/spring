@@ -1,20 +1,21 @@
 package es.codeurjc.db;
 
-import java.util.List;
-
-import jakarta.annotation.PostConstruct;
+import java.lang.foreign.Linker.Option;
+import java.util.Optional;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import es.codeurjc.db.model.Player;
 import es.codeurjc.db.model.Team;
+import jakarta.annotation.PostConstruct;
 
-@RestController
+@Controller
 public class TeamController {
 
 	@Autowired
@@ -40,31 +41,58 @@ public class TeamController {
 		teamRepository.save(team);
 	}
 
-	@GetMapping("/teams/")
-	public List<Team> getTeams() throws Exception {
-		return teamRepository.findAll();
+	@GetMapping("/")
+	public String getIndex(Model model) {
+		model.addAttribute("teams", teamRepository.findAll());
+		model.addAttribute("players", playerRepository.findAll());
+		return "index";
+	}
+
+	@GetMapping("/teams/{id}")
+	public String getTeam(Model model, @PathVariable long id) {
+		Optional<Team> teamOptional = teamRepository.findById(id);
+		if(teamOptional.isEmpty()) {
+			return "team_not_found";
+		}else{
+			Team team = teamOptional.get();
+			model.addAttribute("team", team);
+			return "show_team";
+		}
+	}
+
+	@GetMapping("/players/{id}")
+	public String getPlayer(Model model, @PathVariable long id) {
+		Optional<Player> playerOptional = playerRepository.findById(id);
+		if(playerOptional.isEmpty()) {
+			return "player_not_found";
+		}else{
+			Player player = playerOptional.get();
+			model.addAttribute("player", player);
+			return "show_player";
+		}
 	}
 	
-	@GetMapping("/players/")
-	public List<Player> getPlayers() throws Exception {
-		return playerRepository.findAll();
+	// Deleting a team doesn't delete its associated players
+	@PostMapping("/teams/{id}/delete")	
+	public String deleteTeam(@PathVariable Long id) {
+		Optional<Team> teamOptional = teamRepository.findById(id);
+		if(teamOptional.isEmpty()) {
+			return "team_not_found";
+		}else{
+			teamRepository.deleteById(id);
+			return "deleted_team";
+		}
 	}
 	
-	//Deleting a team doesn't delete its associated players
-	@DeleteMapping("/teams/{id}")	
-	public Team deleteTeam(@PathVariable Long id) {
-		Team team = teamRepository.findById(id).orElseThrow();		
-		//Force loading players from database to be returned as JSON
-		Hibernate.initialize(team.getPlayers());		
-		teamRepository.deleteById(id);
-		return team;
-	}
-	
-	//A player only can be deleted if it has no associated team
-	@DeleteMapping("/players/{id}")	
-	public Player deleteProject(@PathVariable Long id) {
-		Player player = playerRepository.findById(id).orElseThrow();		
-		playerRepository.deleteById(id);
-		return player;
+	// A player only can be deleted if it has no associated team
+	@PostMapping("/players/{id}/delete")	
+	public String deleteProject(@PathVariable Long id) {
+		Optional<Player> playerOptional = playerRepository.findById(id);
+		if(playerOptional.isEmpty()) {
+			return "player_not_found";
+		}else{
+			playerRepository.deleteById(id);
+			return "deleted_player";
+		}
 	}
 }
