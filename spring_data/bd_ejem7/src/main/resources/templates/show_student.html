@@ -4,11 +4,13 @@
 
 	<p>Name: {{student.name}}</p>
 	<p>Start Year: {{student.startYear}}</p>
-
+	
 	{{#student.project}}
-		Project: {{student.project.title}} ({{student.project.calification}})
-		
-		</br>
+	Project: {{student.project.title}} ({{student.project.calification}})
+	<form action="/students/{{student.id}}/project/delete" method="post" style="display: inline;">
+		<input type='submit' value='Delete project'/>
+	</form>
+	</br>
 	{{/student.project}}
 
 	{{^student.project}}

@@ -71,9 +71,7 @@ public class SchoolController {
 		// Save the student
 		studentRepository.save(student);
 
-		model.addAttribute("student", student);
-
-		return "show_student";
+		return "redirect:/students/"+studentId;
 	}
 	
 	// Deleting a student delete her associated project
@@ -98,7 +96,7 @@ public class SchoolController {
 		studentRepository.save(student);
 		projectRepository.delete(project);
 
-		model.addAttribute("student", student);
-		return "show_student";
+		return "redirect:/students/"+studentId;
 	}
+	
 }

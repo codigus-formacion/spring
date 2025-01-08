@@ -68,11 +68,7 @@ public class SchoolController {
 		// Save the student
 		studentRepository.save(student);
 
-		model.addAttribute("student", student);
-
-		System.out.println(student);
-
-		return "show_student";
+		return "redirect:/students/"+studentId;
 	}
 	
 	// Deleting a student delete her associated project
