@@ -1,21 +1,20 @@
 package es.codeurjc.db;
 
-import java.util.List;
-
-import jakarta.annotation.PostConstruct;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import es.codeurjc.db.model.Blog;
 import es.codeurjc.db.model.Comment;
+import jakarta.annotation.PostConstruct;
 
-@RestController
-@RequestMapping("/")
+@Controller
 public class BlogController {
 
 	@Autowired
@@ -27,42 +26,63 @@ public class BlogController {
 	@PostConstruct
 	public void init() {
 
-		Blog blog = new Blog("New", "My new product");
-		blog.getComments().add(new Comment("Cool", "Pepe"));
-		blog.getComments().add(new Comment("Very cool", "Juan"));
+		Blog blog = new Blog("Spring Blog", "Spring is cool");
+		blog.getComments().add(new Comment("Pepe", "Cool!"));
+		blog.getComments().add(new Comment("Juan", "Very cool"));
 
 		blogRepository.save(blog);
 	}
 
-	@GetMapping("/blogs")
-	public List<Blog> getBlogs() throws Exception {
-		return blogRepository.findAll();
+	@GetMapping("/")
+	public String getBlogs(Model model) throws Exception {
+		model.addAttribute("blogs", blogRepository.findAll());
+		return "index";
+	}
+
+	@PostMapping("/blogs/new")
+	public String newBlog(Model model, Blog blog) {
+		blogRepository.save(blog);
+		return "saved_blog";
+	}
+
+	@GetMapping("/blogs/{id}")
+	public String getBlog(Model model, @PathVariable long id) {
+		Optional<Blog> blog = blogRepository.findById(id);
+		if (blog.isPresent()) {
+			model.addAttribute("blog", blog.get());
+			return "show_blog";
+		} else {
+			return "blog_not_found";
+		}
 	}
 
 	// Deleting a blog delete its associated comments
-	@GetMapping("/blogs/{id}")
-	public Blog deleteBlog(@PathVariable Long id) {
-		Blog blog = blogRepository.findById(id).orElseThrow();
-		blogRepository.deleteById(id);
-		return blog;
+	@PostMapping("/blogs/{id}/delete")
+	public String deleteBlog(@PathVariable long id) {
+		Optional<Blog> blog = blogRepository.findById(id);
+		if (blog.isPresent()) {
+			blogRepository.deleteById(id);
+			return "redirect:/";
+		} else {
+			return "blog_not_found";
+		}
 	}
 
-	// A comment only can be deleted if it has no associated blog
-	// This method doesn't work
-	@DeleteMapping("/comments/{id}")
-	public Comment deleteComment(@PathVariable Long id) {
-		Comment comment = commentRepository.findById(id).orElseThrow();
-		commentRepository.deleteById(id);
-		return comment;
+	@PostMapping("/blogs/{blogId}/comments/new")
+	public String newComment(@PathVariable long blogId, Comment comment) {
+		Blog blog = blogRepository.findById(blogId).orElseThrow();
+		blog.getComments().add(comment);
+		commentRepository.save(comment);
+		return "redirect:/blogs/" + blogId;
 	}
 
-	@DeleteMapping("/blogs/{blogId}/comments/{commentId}")
-	public Comment deleteComment(@PathVariable Long blogId, @PathVariable Long commentId) {
+	@PostMapping("/blogs/{blogId}/comments/{commentId}/delete")
+	public String deleteComment(@PathVariable Long blogId, @PathVariable Long commentId) {
 		Blog blog = blogRepository.findById(blogId).orElseThrow();
 		Comment comment = commentRepository.findById(commentId).orElseThrow();
 		blog.getComments().remove(comment);
 		commentRepository.deleteById(commentId);
-		return comment;
+		return "redirect:/blogs/" + blogId;
 	}
 
 }

@@ -1,0 +1,17 @@
+<html>
+<body>
+	<h1>Blogs</h1>
+
+	{{#blogs}}
+	<a href="/blogs/{{id}}">{{title}}</a>
+	<br>
+	{{/blogs}}
+	
+	{{^blogs}}
+	<p>No blogs yet.</p>
+	{{/blogs}}
+
+	<br>
+	<a href="new_blog.html">New Blog</a>
+</body>
+</html>
