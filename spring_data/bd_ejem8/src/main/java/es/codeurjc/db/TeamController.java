@@ -3,6 +3,7 @@ package es.codeurjc.db;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,7 @@ public class TeamController {
 		playerRepository.save(p2);
 		playerRepository.save(p3);
 		
-		Team team = new Team("Selección", 1);
+		Team team = new Team("Selección Española", 1);
 		
 		team.getPlayers().add(p1);
 		team.getPlayers().add(p2);
@@ -54,9 +55,12 @@ public class TeamController {
 		return "saved_team";
 	}
 
-	@PostMapping("/players/new")
-	public String newPlayer(Player player) {
+	@PostMapping("/teams/{team_id}/players/new")
+	public String newPlayer(Player player, @PathVariable long team_id) {
 		playerRepository.save(player);
+		Team team = teamRepository.findById(team_id).get();
+		team.getPlayers().add(player);
+		teamRepository.save(team);
 		return "saved_player";
 	}
 
@@ -107,7 +111,7 @@ public class TeamController {
 				playerRepository.deleteById(id);
 				return "deleted_player";
 			}
-			catch(Exception e){
+			catch(DataIntegrityViolationException e){
 				return "player_has_team";
 			}
 		}
