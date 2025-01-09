@@ -1,17 +1,17 @@
 <html>
 <body>
-	<h1>Blogs</h1>
+	<h1>Posts</h1>
 
-	{{#blogs}}
-	<a href="/blogs/{{id}}">{{title}}</a>
+	{{#posts}}
+	<a href="/posts/{{id}}">{{title}}</a>
 	<br>
-	{{/blogs}}
+	{{/posts}}
 	
-	{{^blogs}}
-	<p>No blogs yet.</p>
-	{{/blogs}}
+	{{^posts}}
+	<p>No posts yet.</p>
+	{{/posts}}
 
 	<br>
-	<a href="new_blog.html">New Blog</a>
+	<a href="new_post.html">New Post</a>
 </body>
 </html>

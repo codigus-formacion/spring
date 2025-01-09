@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Blog {
+public class Post {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,9 +23,9 @@ public class Blog {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
 
-	protected Blog() {}
+	protected Post() {}
 
-	public Blog(String title, String text) {
+	public Post(String title, String text) {
 		this.title = title;
 		this.text = text;
 	}
@@ -64,7 +64,7 @@ public class Blog {
 
 	@Override
 	public String toString() {
-		return "Blog [id=" + id + ", title=" + title + ", text=" + text + "]";
+		return "Post [id=" + id + ", title=" + title + ", text=" + text + "]";
 	}
 
 }
