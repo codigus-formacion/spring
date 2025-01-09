@@ -1,12 +1,10 @@
-package es.codeurjc.board.model;
+package es.codeurjc.db.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Comment {
@@ -15,20 +13,20 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	private String username;
-	private String comment;
+	private String author;
+	private String message;
 
 	@ManyToOne
-	@JsonIgnore
 	private Post post;
 
-	public Comment() {
+	
+	protected Comment() {
 	}
 
-	public Comment(String nickname, String comment) {
+	public Comment(String author, String message) {
 		super();
-		this.username = nickname;
-		this.comment = comment;
+		this.author = author;
+		this.message = message;
 	}
 
 	public long getId() {
@@ -39,20 +37,20 @@ public class Comment {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getAuthor() {
+		return author;
 	}
 
-	public void setUsername(String nickname) {
-		this.username = nickname;
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
-	public String getComment() {
-		return comment;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public Post getPost() {
@@ -61,6 +59,11 @@ public class Comment {
 
 	public void setPost(Post post) {
 		this.post = post;
+	}
+
+	@Override
+	public String toString() {
+		return "Comment [id=" + id + ", author=" + author + ", message=" + message + "]";
 	}
 
 }

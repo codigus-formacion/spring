@@ -28,8 +28,8 @@ public class PostController {
 	public void init() {
 
 		Post post = new Post("Spring Post", "Spring is cool");
-		post.getComments().add(new Comment("Pepe", "Cool!"));
-		post.getComments().add(new Comment("Juan", "Very cool"));
+		post.addComment(new Comment("Pepe", "Cool!"));
+		post.addComment(new Comment("Juan", "Very cool"));
 
 		postRepository.save(post);
 	}
@@ -57,6 +57,31 @@ public class PostController {
 		}
 	}
 
+	@GetMapping("/posts/{id}/edit")
+	public String editPost(Model model, @PathVariable long id) {
+		Optional<Post> post = postRepository.findById(id);
+		if (post.isPresent()) {
+			model.addAttribute("post", post.get());
+			return "edit_post";
+		} else {
+			return "post_not_found";
+		}
+	}
+
+	@PostMapping("/posts/{id}/update")
+	public String updatePost(Model model, Post updatedPost, @PathVariable long id) {
+		
+		Post oldPost = postRepository.findById(id).orElseThrow();
+		updatedPost.setId(id);
+
+		// We assume that comments are not updated with PUT operation
+		oldPost.getComments().forEach(c -> updatedPost.addComment(c));
+
+		postRepository.save(updatedPost);
+
+		return "redirect:/posts/" + id;
+	}
+
 	// Deleting a post delete its associated comments
 	@PostMapping("/posts/{id}/delete")
 	public String deletePost(@PathVariable long id) {
@@ -72,7 +97,7 @@ public class PostController {
 	@PostMapping("/posts/{postId}/comments/new")
 	public String newComment(@PathVariable long postId, Comment comment) {
 		Post post = postRepository.findById(postId).orElseThrow();
-		post.getComments().add(comment);
+		comment.setPost(post);
 		commentRepository.save(comment);
 		return "redirect:/posts/" + postId;
 	}
