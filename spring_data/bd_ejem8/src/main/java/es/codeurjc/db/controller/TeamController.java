@@ -1,4 +1,4 @@
-package es.codeurjc.db;
+package es.codeurjc.db.controller;
 
 import java.util.Optional;
 
@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import es.codeurjc.db.model.Player;
 import es.codeurjc.db.model.Team;
+import es.codeurjc.db.repository.PlayerRepository;
+import es.codeurjc.db.repository.TeamRepository;
 import jakarta.annotation.PostConstruct;
 
 @Controller
