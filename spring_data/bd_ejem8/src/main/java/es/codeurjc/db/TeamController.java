@@ -1,9 +1,7 @@
 package es.codeurjc.db;
 
-import java.lang.foreign.Linker.Option;
 import java.util.Optional;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,9 +27,11 @@ public class TeamController {
 
 		Player p1 = new Player("Torres", 10);
 		Player p2 = new Player("Iniesta", 10);
+		Player p3 = new Player("Messi", 20);
 		
 		playerRepository.save(p1);
 		playerRepository.save(p2);
+		playerRepository.save(p3);
 		
 		Team team = new Team("Selección", 1);
 		
@@ -46,6 +46,18 @@ public class TeamController {
 		model.addAttribute("teams", teamRepository.findAll());
 		model.addAttribute("players", playerRepository.findAll());
 		return "index";
+	}
+
+	@PostMapping("/teams/new")
+	public String newTeam(Team team) {
+		teamRepository.save(team);
+		return "saved_team";
+	}
+
+	@PostMapping("/players/new")
+	public String newPlayer(Player player) {
+		playerRepository.save(player);
+		return "saved_player";
 	}
 
 	@GetMapping("/teams/{id}")
@@ -91,8 +103,13 @@ public class TeamController {
 		if(playerOptional.isEmpty()) {
 			return "player_not_found";
 		}else{
-			playerRepository.deleteById(id);
-			return "deleted_player";
+			try{
+				playerRepository.deleteById(id);
+				return "deleted_player";
+			}
+			catch(Exception e){
+				return "player_has_team";
+			}
 		}
 	}
 }

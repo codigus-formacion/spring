@@ -15,6 +15,16 @@
 	{{/team.players}}
 
 	<br>
+	
+	<h1>Add player</h1>
+	<form action="/players/new" method="post" style="background-color: #c2c2c2; width: 200px; padding: 10px;">
+		<p>Name: </p>	
+		<input type='text' name='name'/>
+		<p>Goals</p>
+		<input type='number' name='goals'/>
+
+		<input type='submit' value='Save'/>
+	</form>
 
 	<form action="/teams/{{ team.id }}/delete" method="post">
 		<input type='submit' value='Delete team'/>
