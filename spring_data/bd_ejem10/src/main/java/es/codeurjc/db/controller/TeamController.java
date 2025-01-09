@@ -61,8 +61,8 @@ public class TeamController {
 	public String newPlayer(Player player, @PathVariable long team_id) {
 		playerRepository.save(player);
 		Team team = teamRepository.findById(team_id).get();
-		team.getPlayers().add(player);
-		teamRepository.save(team);
+		player.setTeam(team);
+		playerRepository.save(player);
 		return "saved_player";
 	}
 
@@ -97,6 +97,8 @@ public class TeamController {
 		if(teamOptional.isEmpty()) {
 			return "team_not_found";
 		}else{
+			Team team = teamOptional.get();
+			team.getPlayers().forEach(player -> player.setTeam(null));
 			teamRepository.deleteById(id);
 			return "deleted_team";
 		}
