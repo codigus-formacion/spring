@@ -1,4 +1,4 @@
-package es.codeurjc.db;
+package es.codeurjc.board;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,8 +10,8 @@ public class Post {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-
+	private Long id;
+	
 	private String username;
 	private String title;
 	private String text;
@@ -19,14 +19,14 @@ public class Post {
 	public Post() {
 	}
 
-	public Post(String user, String title, String text) {
+	public Post(String username, String title, String text) {
 		super();
-		this.username = user;
+		this.username = username;
 		this.title = title;
 		this.text = text;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
