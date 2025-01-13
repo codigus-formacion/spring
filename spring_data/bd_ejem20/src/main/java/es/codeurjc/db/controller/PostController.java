@@ -35,7 +35,7 @@ public class PostController {
 	}
 
 	@GetMapping("/")
-	public String getPosts(Model model) throws Exception {
+	public String getPosts(Model model){
 		model.addAttribute("posts", postRepository.findAll());
 		return "index";
 	}

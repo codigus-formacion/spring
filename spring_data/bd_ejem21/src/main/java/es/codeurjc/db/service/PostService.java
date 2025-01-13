@@ -13,22 +13,22 @@ import es.codeurjc.db.repository.PostRepository;
 public class PostService {
 	
 	@Autowired
-	private PostRepository posts;
+	private PostRepository postRepository;
 
 	public void save(Post post) {
-		posts.save(post);		
+		postRepository.save(post);		
 	}
 
 	public List<Post> findAll() {
-		return posts.findAll();
+		return postRepository.findAll();
 	}
 
 	public Optional<Post> findById(long id) {
-		return posts.findById(id);
+		return postRepository.findById(id);
 	}
 
 	public void deleteById(long id) {
 		
-		posts.deleteById(id);		
+		postRepository.deleteById(id);		
 	}
 }

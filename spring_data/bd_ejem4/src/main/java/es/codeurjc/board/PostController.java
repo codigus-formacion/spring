@@ -23,23 +23,23 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 public class PostController {
 
 	@Autowired
-	private PostRepository posts;
+	private PostRepository postRepository;
 
 	@PostConstruct
 	public void init() {
-		posts.save(new Post("Pepe", "Vendo moto", "Barata, barata"));
-		posts.save(new Post("Juan", "Compro coche", "Pago bien"));
+		postRepository.save(new Post("Pepe", "Vendo moto", "Barata, barata"));
+		postRepository.save(new Post("Juan", "Compro coche", "Pago bien"));
 	}
 	
 	@GetMapping("/")
-	public Collection<Post> getPosts() {
-		return posts.findAll();
+	public Collection<Post> getPostRepository() {
+		return postRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Post> getPost(@PathVariable long id) {
 
-		Optional<Post> post = posts.findById(id);
+		Optional<Post> post = postRepository.findById(id);
 
 		return ResponseEntity.of(post);
 	}
@@ -47,7 +47,7 @@ public class PostController {
 	@PostMapping("/")
 	public ResponseEntity<Post> createPost(@RequestBody Post post) {
 
-		posts.save(post);
+		postRepository.save(post);
 
 		URI location = fromCurrentRequest().path("/{id}").buildAndExpand(post.getId()).toUri();
 
@@ -57,12 +57,12 @@ public class PostController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Post> replacePost(@PathVariable long id, @RequestBody Post newPost) {
 
-		Optional<Post> post = posts.findById(id);
+		Optional<Post> post = postRepository.findById(id);
 
 		return ResponseEntity.of(post.map(p -> {
 			
 			newPost.setId(id);
-			posts.save(newPost);
+			postRepository.save(newPost);
 			
 			return newPost;
 		}));
@@ -71,9 +71,9 @@ public class PostController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Post> deletePost(@PathVariable long id) {
 
-		Optional<Post> post = posts.findById(id);
+		Optional<Post> post = postRepository.findById(id);
 
-		post.ifPresent(p -> posts.deleteById(id));
+		post.ifPresent(p -> postRepository.deleteById(id));
 		
 		return ResponseEntity.of(post);
 	}

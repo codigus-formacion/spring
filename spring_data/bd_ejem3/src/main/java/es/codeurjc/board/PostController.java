@@ -23,29 +23,29 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
 	@Autowired
-	private PostRepository posts;
+	private PostRepository postRepository;
 
 	@PostConstruct
 	public void init() {
-		posts.save(new Post("Pepe", "Vendo moto", "Barata, barata"));
-		posts.save(new Post("Juan", "Compro coche", "Pago bien"));
+		postRepository.save(new Post("Pepe", "Vendo moto", "Barata, barata"));
+		postRepository.save(new Post("Juan", "Compro coche", "Pago bien"));
 	}
 	
 	@GetMapping("/")
-	public Collection<Post> getPosts() {
-		return posts.findAll();
+	public Collection<Post> getPostRepository() {
+		return postRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
 	public Post getPost(@PathVariable long id) {
 
-		return posts.findById(id).orElseThrow();
+		return postRepository.findById(id).orElseThrow();
 	}
 
 	@PostMapping("/")
 	public ResponseEntity<Post> createPost(@RequestBody Post post) {
 
-		posts.save(post);
+		postRepository.save(post);
 
 		URI location = fromCurrentRequest().path("/{id}").buildAndExpand(post.getId()).toUri();
 
@@ -55,10 +55,10 @@ public class PostController {
 	@PutMapping("/{id}")
 	public Post replacePost(@PathVariable long id, @RequestBody Post newPost) {
 
-		posts.findById(id).orElseThrow();
+		postRepository.findById(id).orElseThrow();
 
 		newPost.setId(id);
-		posts.save(newPost);
+		postRepository.save(newPost);
 			
 		return newPost;
 	}
@@ -66,9 +66,9 @@ public class PostController {
 	@DeleteMapping("/{id}")
 	public Post deletePost(@PathVariable long id) {
 
-		Post post = posts.findById(id).orElseThrow();
+		Post post = postRepository.findById(id).orElseThrow();
 
-		posts.deleteById(id);
+		postRepository.deleteById(id);
 		
 		return post;
 	}

@@ -15,18 +15,18 @@ import jakarta.annotation.PostConstruct;
 public class PostController {
 
 	@Autowired
-	private PostRepository posts;
+	private PostRepository postRepository;
 
 	@PostConstruct
 	public void init() {
-		posts.save(new Post("Pepe", "Vendo moto", "Barata, barata"));
-		posts.save(new Post("Juan", "Compro coche", "Pago bien"));
+		postRepository.save(new Post("Pepe", "Vendo moto", "Barata, barata"));
+		postRepository.save(new Post("Juan", "Compro coche", "Pago bien"));
 	}
 
 	@GetMapping("/")
 	public String showPosts(Model model) {
 
-		model.addAttribute("posts", posts.findAll());
+		model.addAttribute("posts", postRepository.findAll());
 
 		return "index";
 	}
@@ -34,7 +34,7 @@ public class PostController {
 	@GetMapping("/post/{id}")
 	public String showPost(Model model, @PathVariable long id) {
 
-		Optional<Post> op = posts.findById(id);
+		Optional<Post> op = postRepository.findById(id);
 
 		if (op.isPresent()) {
 			Post post = op.get();
@@ -48,7 +48,7 @@ public class PostController {
 	@PostMapping("/post/new")
 	public String newPost(Model model, Post post) {
 
-		posts.save(post);
+		postRepository.save(post);
 
 		return "saved_post";
 	}
@@ -56,7 +56,7 @@ public class PostController {
 	@GetMapping("/editpost/{id}")
 	public String editBook(Model model, @PathVariable long id) {
 
-		Optional<Post> op = posts.findById(id);
+		Optional<Post> op = postRepository.findById(id);
 		if (op.isPresent()) {
 			Post post = op.get();
 			model.addAttribute("post", post);
@@ -69,9 +69,9 @@ public class PostController {
 	@PostMapping("/editpost")
 	public String editBookProcess(Model model, Post editedPost) {
 
-		Optional<Post> op = posts.findById(editedPost.getId());
+		Optional<Post> op = postRepository.findById(editedPost.getId());
 		if (op.isPresent()) {
-			posts.save(editedPost);
+			postRepository.save(editedPost);
 			model.addAttribute("post", editedPost);
 			return "edited_post";
 		} else {
@@ -82,10 +82,10 @@ public class PostController {
 	@PostMapping("/post/{id}/delete")
 	public String deletePost(Model model, @PathVariable long id) {
 
-		Optional<Post> post = posts.findById(id);
+		Optional<Post> post = postRepository.findById(id);
 
 		if (post.isPresent()) {
-			posts.deleteById(id);
+			postRepository.deleteById(id);
 			return "deleted_post";
 		} else {
 			return "post_not_found";

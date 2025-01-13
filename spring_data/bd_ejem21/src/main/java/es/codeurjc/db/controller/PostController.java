@@ -24,7 +24,7 @@ public class PostController {
 	private CommentService commentService;
 
 	@GetMapping("/")
-	public String getPosts(Model model) throws Exception {
+	public String getPosts(Model model){
 		model.addAttribute("posts", postService.findAll());
 		return "index";
 	}
