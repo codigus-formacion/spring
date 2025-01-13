@@ -1,12 +1,12 @@
-package es.codeurjc.db;
+package es.codeurjc.db.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
+import es.codeurjc.db.model.Post;
 
-	Page<Post> findByUsername(String username, Pageable page);
+public interface PostRepository extends JpaRepository<Post, Long> {
 
 	Page<Post> findByTitle(String title, Pageable page);
 
