@@ -64,7 +64,7 @@ public class TeamController {
 		if(name != null) {
 			Team team = new Team();
 			team.setName(name);
-			ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id","ranking")
+			ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id","ranking");
 			Example<Team> example = Example.of(team, matcher);
 			model.addAttribute("teams", teamRepository.findAll(example));
 		}else{
