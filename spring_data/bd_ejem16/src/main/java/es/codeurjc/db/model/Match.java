@@ -1,4 +1,4 @@
-package es.codeurjc.db;
+package es.codeurjc.db.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +13,7 @@ public class Match {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	private String data;
+	private String name;
 
 	@ManyToOne
 	private Team team1;
@@ -30,11 +30,11 @@ public class Match {
 
 	public Match(String data) {
 		super();
-		this.data = data;
+		this.name = data;
 	}
 
-	public String getData() {
-		return data;
+	public String getName() {
+		return name;
 	}
 
 	public Team getTeam1() {
@@ -59,7 +59,7 @@ public class Match {
 
 	@Override
 	public String toString() {
-		return "Match [id=" + id + ", data=" + data + "]";
+		return "Match [id=" + id + ", data=" + name + "]";
 	}
 
 }

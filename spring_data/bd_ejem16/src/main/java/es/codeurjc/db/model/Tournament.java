@@ -1,4 +1,4 @@
-package es.codeurjc.db;
+package es.codeurjc.db.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +12,7 @@ public class Tournament {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	private String data;
+	private String name;
 
 	public Tournament() {
 		super();
@@ -20,20 +20,20 @@ public class Tournament {
 
 	public Tournament(String data) {
 		super();
-		this.data = data;
+		this.name = data;
 	}
 
-	public String getData() {
-		return data;
+	public String getName() {
+		return name;
 	}
 
-	public void setData(String data) {
-		this.data = data;
+	public void setName(String data) {
+		this.name = data;
 	}
 
 	@Override
 	public String toString() {
-		return "Tournament [id=" + id + ", data=" + data + "]";
+		return "Tournament [id=" + id + ", data=" + name + "]";
 	}
 
 }
