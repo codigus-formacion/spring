@@ -1,4 +1,4 @@
-package es.codeurjc.db;
+package es.codeurjc.db.repository;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
 	@Query("select t from Team t where t.name = ?1")
 	List<Team> findByName(String name);
-	
+    
 }

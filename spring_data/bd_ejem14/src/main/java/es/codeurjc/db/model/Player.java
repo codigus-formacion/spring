@@ -9,34 +9,22 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 
-import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 public class Player {
 
-	public interface BasicAtt {
-	}
-
-	public interface TeamAtt {
-	}
-
-	@JsonView(BasicAtt.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@JsonView(BasicAtt.class)
 	private String name;
 
-	@JsonView(BasicAtt.class)
 	private int goals;
 
-	@JsonView(TeamAtt.class)
 	@ManyToMany
 	private List<Team> teams = new ArrayList<>();
 
-	protected Player() {
-	}
+	public Player() {}
 
 	public Player(String author, int goals) {
 		super();
