@@ -1,10 +1,8 @@
 <html>
 <body>
 	<h1>Posts</h1>
-
 	{{#posts}}
-	<a href="/posts/{{id}}">{{title}}</a>
-	<br>
+	<a href="post/{{id}}">{{username}} {{title}}</a><br>
 	{{/posts}}
 	
 	{{^posts}}

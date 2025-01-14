@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Project {
@@ -14,6 +15,9 @@ public class Project {
 
 	private String title;
 	private int calification;
+
+	@OneToOne(mappedBy = "project")
+	private Student student;
 
 	protected Project() {
 	}
@@ -45,6 +49,14 @@ public class Project {
 
 	public void setCalification(int calification) {
 		this.calification = calification;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
 	}
 
 	@Override

@@ -27,21 +27,21 @@ public class TeamController {
 
 	@PostConstruct
 	public void init() {
-
+		
+		Team team = new Team("Selección Española", 1);
+		
+		teamRepository.save(team);
+		
 		Player p1 = new Player("Torres", 10);
 		Player p2 = new Player("Iniesta", 10);
 		Player p3 = new Player("Messi", 20);
 		
+		p1.setTeam(team);
+		p2.setTeam(team);
+		
 		playerRepository.save(p1);
 		playerRepository.save(p2);
 		playerRepository.save(p3);
-		
-		Team team = new Team("Selección Española", 1);
-		
-		team.getPlayers().add(p1);
-		team.getPlayers().add(p2);
-
-		teamRepository.save(team);
 	}
 
 	@GetMapping("/")
@@ -61,8 +61,8 @@ public class TeamController {
 	public String newPlayer(Player player, @PathVariable long team_id) {
 		playerRepository.save(player);
 		Team team = teamRepository.findById(team_id).get();
-		team.getPlayers().add(player);
-		teamRepository.save(team);
+		player.setTeam(team);
+		playerRepository.save(player);
 		return "saved_player";
 	}
 
@@ -97,25 +97,22 @@ public class TeamController {
 		if(teamOptional.isEmpty()) {
 			return "team_not_found";
 		}else{
+			Team team = teamOptional.get();
+			team.getPlayers().forEach(player -> player.setTeam(null));
 			teamRepository.deleteById(id);
 			return "deleted_team";
 		}
 	}
 	
-	// A player only can be deleted if it has no associated team
+	// A player with a team now can be deleted
 	@PostMapping("/players/{id}/delete")	
 	public String deleteProject(@PathVariable Long id) {
 		Optional<Player> playerOptional = playerRepository.findById(id);
 		if(playerOptional.isEmpty()) {
 			return "player_not_found";
 		}else{
-			try{
-				playerRepository.deleteById(id);
-				return "deleted_player";
-			}
-			catch(DataIntegrityViolationException e){
-				return "player_has_team";
-			}
+			playerRepository.deleteById(id);
+			return "deleted_player";
 		}
 	}
 }

@@ -1,29 +1,17 @@
 <html>
 <body>
-	<h1>School</h1>
+	<h1>Posts</h1>
 
-	<h3>Students</h3>
-	{{#students}}
-	<a href="/students/{{id}}">{{name}}</a>
+	{{#posts}}
+	<a href="/posts/{{id}}">{{title}}</a>
 	<br>
-	{{/students}}
+	{{/posts}}
 	
-	{{^students}}
-	<p>No students yet.</p>
-	{{/students}}
-
-	<h3>Projects</h3>
-	<ul>
-	{{#projects}}
-		<li>{{title}} ({{calification}}) - (Student: {{student.name}})</li>
-	{{/projects}}
-	</ul>
-	
-	{{^projects}}
-	<p>No projects yet.</p>
-	{{/projects}}
+	{{^posts}}
+	<p>No posts yet.</p>
+	{{/posts}}
 
 	<br>
-	<a href="new_student.html">New Student</a>
+	<a href="new_post.html">New Post</a>
 </body>
 </html>

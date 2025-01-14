@@ -26,17 +26,12 @@ public class SchoolController {
 
 	@PostConstruct
 	public void init() {
-
-		Project p1 = new Project("TFG1", 8);
-		projectRepository.save(p1);
-		
 		Student s1 = new Student("Pepe", 2010);
-		s1.setProject(p1);
+		s1.setProject(new Project("TFG1", 8));
+		studentRepository.save(s1);
 		
 		Student s2 = new Student("Juan", 2011);
-		
-		studentRepository.save(s1);
-		studentRepository.save(s2);		
+		studentRepository.save(s2);
 	}
 
 	@GetMapping("/")
@@ -66,9 +61,6 @@ public class SchoolController {
 	@PostMapping("/students/{studentId}/project")
 	public String createProject(Model model, @PathVariable Long studentId, Project project) {
 
-		// Save the project first
-		projectRepository.save(project);
-
 		// Associate the project with the student
 		Student student = studentRepository.findById(studentId).get();
 		student.setProject(project);
@@ -79,14 +71,14 @@ public class SchoolController {
 		return "redirect:/students/"+studentId;
 	}
 	
-	// Deleting a student doesn't delete his/her associated project
+	// Deleting a student delete her associated project
 	@PostMapping("/students/{id}/delete")
 	public String deleteStudent(@PathVariable Long id, Model model) {
 		studentRepository.deleteById(id);
 		return "deleted_student";
 	}
 	
-	// A project only can be deleted if it has no associated student.
+	// A project only can be deleted if it has no associated student. But if you try it, no error is thrown
 	@PostMapping("/students/{studentId}/project/delete")
 	public String deleteProject(Model model, @PathVariable Long studentId) {
 
@@ -101,7 +93,7 @@ public class SchoolController {
 		studentRepository.save(student);
 		projectRepository.delete(project);
 
-		return "redirect:/students/"+studentId;
+		model.addAttribute("student", student);
+		return "show_student";
 	}
-	
 }

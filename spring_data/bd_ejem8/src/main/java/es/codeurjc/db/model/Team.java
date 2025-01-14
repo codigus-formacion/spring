@@ -11,15 +11,16 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Team {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	long id;
 
 	private String name;
+	
 	private int ranking;
 
-	@OneToMany
+	@OneToMany(mappedBy="team")
 	private List<Player> players = new ArrayList<>();
 
 	protected Team() {
@@ -42,16 +43,12 @@ public class Team {
 		return name;
 	}
 
-	public void setName(String title) {
-		this.name = title;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public List<Player> getPlayers() {
 		return players;
-	}
-
-	public void setPlayers(List<Player> comments) {
-		this.players = comments;
 	}
 
 	@Override

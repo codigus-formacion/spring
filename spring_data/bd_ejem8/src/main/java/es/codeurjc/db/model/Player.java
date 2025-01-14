@@ -4,16 +4,24 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Player {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
 	private String name;
+	
 	private int goals;
+
+	@JsonIgnore
+	@ManyToOne
+	private Team team;
 
 	protected Player() {
 	}
@@ -36,8 +44,16 @@ public class Player {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String author) {
+		this.name = author;
+	}
+	
+	public Team getTeam() {
+		return team;
+	}
+	
+	public void setTeam(Team team) {
+		this.team = team;		
 	}
 
 	public int getGoals() {
@@ -53,5 +69,6 @@ public class Player {
 		return "Player [id=" + id + ", name=" + name + ", goals=" + goals + "]";
 	}
 
-}
+	
 
+}

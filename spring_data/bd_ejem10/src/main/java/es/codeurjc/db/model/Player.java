@@ -1,34 +1,34 @@
 package es.codeurjc.db.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Player {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
 	private String name;
-	
+
 	private int goals;
 
-	@JsonIgnore
-	@ManyToOne
-	private Team team;
+	@ManyToMany
+	private List<Team> teams = new ArrayList<>();
 
-	protected Player() {
-	}
+	public Player() {}
 
-	public Player(String name, int goals) {
+	public Player(String author, int goals) {
 		super();
-		this.name = name;
+		this.name = author;
 		this.goals = goals;
 	}
 
@@ -47,17 +47,17 @@ public class Player {
 	public void setName(String author) {
 		this.name = author;
 	}
-	
-	public Team getTeam() {
-		return team;
-	}
-	
-	public void setTeam(Team team) {
-		this.team = team;		
-	}
 
 	public int getGoals() {
 		return goals;
+	}
+
+	public List<Team> getTeams() {
+		return teams;
+	}
+
+	public void setTeams(List<Team> teams) {
+		this.teams = teams;
 	}
 
 	public void setGoals(int goals) {
@@ -68,7 +68,5 @@ public class Player {
 	public String toString() {
 		return "Player [id=" + id + ", name=" + name + ", goals=" + goals + "]";
 	}
-
-	
 
 }

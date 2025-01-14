@@ -20,7 +20,7 @@ public class Post {
 	private String title;
 	private String text;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Comment> comments = new ArrayList<>();
 
 	protected Post() {}
@@ -61,6 +61,16 @@ public class Post {
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
+
+	public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setPost(this);
+    }
+ 
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
+        comment.setPost(null);
+    }
 
 	@Override
 	public String toString() {

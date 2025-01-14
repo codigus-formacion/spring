@@ -1,5 +1,6 @@
 package es.codeurjc.db.model;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -19,6 +21,9 @@ public class Post {
 
 	private String title;
 	private String text;
+
+	@Lob
+	private Blob imageFile;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
@@ -52,6 +57,14 @@ public class Post {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public Blob getImageFile() {
+		return imageFile;
+	}
+
+	public void setImageFile(Blob imageFile) {
+		this.imageFile = imageFile;
 	}
 
 	public List<Comment> getComments() {

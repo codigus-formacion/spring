@@ -1,29 +1,30 @@
 <html>
+
 <body>
-	<h1>School</h1>
+	<h1>Football</h1>
 
-	<h3>Students</h3>
-	{{#students}}
-	<a href="/students/{{id}}">{{name}}</a>
+	<h3>Players</h3>
+	{{#players}}
+		<a href="/players/{{id}}">{{name}}</a>
+		<br>
+	{{/players}}
+
+	{{^players}}
+	<p>No players yet.</p>
+	{{/players}}
+
+	<h3>Teams</h3>
+	{{#teams}}
+		<a href="/teams/{{id}}">{{name}}</a>
+		<br>
+	{{/teams}}
+
+	{{^teams}}
+	<p>No teams yet.</p>
+	{{/teams}}
+
 	<br>
-	{{/students}}
-	
-	{{^students}}
-	<p>No students yet.</p>
-	{{/students}}
-
-	<h3>Projects</h3>
-	<ul>
-	{{#projects}}
-		<li>{{title}} ({{calification}})</li>
-	{{/projects}}
-	</ul>
-	
-	{{^projects}}
-	<p>No projects yet.</p>
-	{{/projects}}
-
-	<br>
-	<a href="new_student.html">New Student</a>
+	<a href="new_team.html">New Team</a>
 </body>
+
 </html>

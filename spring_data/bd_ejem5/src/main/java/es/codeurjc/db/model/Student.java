@@ -1,5 +1,6 @@
 package es.codeurjc.db.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +17,7 @@ public class Student {
 	private String name;
 	private int startYear;
 
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	private Project project;
 
 	protected Student() {

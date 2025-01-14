@@ -1,11 +1,17 @@
 <html>
 <body>
-	<h1>Soccer App</h1>
+	<h1>Posts</h1>
 
-	<a href="/tournaments">See tournaments</a>
-    <br>
-    <a href="/teams">See teams</a>
-    <br>
-    <a href="/players">See players</a>
+	{{#posts}}
+	<a href="/posts/{{id}}">{{title}}</a>
+	<br>
+	{{/posts}}
+	
+	{{^posts}}
+	<p>No posts yet.</p>
+	{{/posts}}
+
+	<br>
+	<a href="new_post.html">New Post</a>
 </body>
 </html>

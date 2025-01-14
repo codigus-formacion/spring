@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Comment {
@@ -14,6 +15,10 @@ public class Comment {
 
 	private String author;
 	private String message;
+
+	@ManyToOne
+	private Post post;
+
 	
 	protected Comment() {
 	}
@@ -46,6 +51,14 @@ public class Comment {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public Post getPost() {
+		return post;
+	}
+
+	public void setPost(Post post) {
+		this.post = post;
 	}
 
 	@Override

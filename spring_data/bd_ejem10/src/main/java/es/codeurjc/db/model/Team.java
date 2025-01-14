@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 public class Team {
@@ -20,11 +20,10 @@ public class Team {
 	
 	private int ranking;
 
-	@OneToMany(mappedBy="team")
+	@ManyToMany(mappedBy="teams")
 	private List<Player> players = new ArrayList<>();
 
-	protected Team() {
-	}
+	public Team() {}
 
 	public Team(String name, int ranking) {
 		this.name = name;
@@ -43,12 +42,16 @@ public class Team {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String title) {
+		this.name = title;
 	}
 
 	public List<Player> getPlayers() {
 		return players;
+	}
+
+	public void setPlayers(List<Player> comments) {
+		this.players = comments;
 	}
 
 	@Override
