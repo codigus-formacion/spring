@@ -1,5 +1,6 @@
 package es.codeurjc.db.controller;
 
+import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -58,14 +59,15 @@ public class PostController {
 	@GetMapping("/posts/{id}/image")
 	public ResponseEntity<Object> downloadImage(@PathVariable long id) throws SQLException {
 
-		Post post = postService.findById(id).get();
+		Optional<Post> op = postService.findById(id);
 
-		if (post.getImageFile() != null) {
-
-			Resource file = new InputStreamResource(post.getImageFile().getBinaryStream());
+		if (op.isPresent() && op.get().getImageFile() != null) {
+			
+			Blob image = op.get().getImageFile();
+			Resource file = new InputStreamResource(image.getBinaryStream());
 
 			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-					.contentLength(post.getImageFile().length()).body(file);
+					.contentLength(image.length()).body(file);
 
 		} else {
 			return ResponseEntity.notFound().build();
