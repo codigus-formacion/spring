@@ -1,56 +1,61 @@
+// REST API Functions
+// ------------------
+
 //Load items from server
-function loadItems(callback) {
-    $.ajax({
-        url: '/items/'
-    }).done(function (items) {
-        console.log('Items loaded: ' + JSON.stringify(items));
-        callback(items);
-    })
+async function getAllItems() {
+    const response = await fetch('/items/');
+    const items = await response.json();
+
+    console.log('Items loaded: ' + JSON.stringify(items));
+    return items;
 }
 
 //Create item in server
-function createItem(item, callback) {
-    $.ajax({
+async function createItem(item) {
+    const response = await fetch('/items/', {
         method: "POST",
-        url: '/items/',
-        data: JSON.stringify(item),
-        processData: false,
         headers: {
             "Content-Type": "application/json"
-        }
-    }).done(function (item) {
-        console.log("Item created: " + JSON.stringify(item));
-        callback(item);
+        },
+        body: JSON.stringify(item)
     });
+    const newItem = await response.json();
+
+    console.log("Item created: " + JSON.stringify(newItem));
+    return newItem;
 }
 
 //Update item in server
-function updateItem(item) {
-    $.ajax({
+async function updateItem(item) {
+    const response = await fetch('/items/' + item.id, {
         method: 'PUT',
-        url: '/items/' + item.id,
-        data: JSON.stringify(item),
-        processData: false,
         headers: {
             "Content-Type": "application/json"
-        }
-    }).done(function (item) {
-        console.log("Updated item: " + JSON.stringify(item))
-    })
+        },
+        body: JSON.stringify(item)
+    });
+    const updatedItem = await response.json();
+    
+    console.log("Updated item: " + JSON.stringify(updatedItem));
+    return updatedItem;
 }
 
 //Delete item from server
-function deleteItem(itemId) {
-    $.ajax({
-        method: 'DELETE',
-        url: '/items/' + itemId
-    }).done(function (item) {
-        console.log("Deleted item " + itemId)
-    })
+async function deleteItem(itemId) {
+    const response = await fetch('/items/' + itemId, {
+        method: 'DELETE'
+    });
+    const deletedItem = await response.json();
+    
+    console.log("Deleted item " + itemId);
+    return deletedItem;
 }
 
-//Show item in page
-function showItem(item) {
+//DOM functions
+// ------------------
+
+//Add Item to page
+function addItemToPage(item) {
 
     var checked = '';
     var style = '';
@@ -60,80 +65,102 @@ function showItem(item) {
         style = 'style="text-decoration:line-through"';
     }
 
-    $('#info').append(
-        '<div id="item-' + item.id + '">'+
-          '<input type="checkbox" ' + checked + '>'+
-          '<span ' + style + '>' + item.description + '</span>'+
-          '<button>Delete</button>'+
-        '</div>')
+    const html = '<div id="item-' + item.id + '">' +
+        '<input type="checkbox" ' + checked + '>' +
+        '<span ' + style + '>' + item.description + '</span>' +
+        '<button>Delete</button>' +
+        '</div>';
+
+    const info = document.getElementById('info');
+    info.insertAdjacentHTML('beforeend', html);
 }
 
-$(document).ready(function () {
+//Add all items to page
+async function addAllItemsToPage() {
+    
+    const items = await getAllItems();
+    
+    for (var i = 0; i < items.length; i++) {
+        addItemToPage(items[i]);
+    }
+}
 
-    loadItems(function(items) {
-        //When items are loaded from server
-        for (var i = 0; i < items.length; i++) {
-            showItem(items[i]);
+function configureDeleteButtons() {
+
+    const info = document.getElementById('info');
+
+    info.addEventListener('click', async function (event) {
+
+        const elem = event.target;
+        if (elem.tagName === 'BUTTON') {
+
+            const itemDiv = elem.parentElement;
+            var itemId = itemDiv.id.split('-')[1];
+
+            itemDiv.remove();
+            await deleteItem(itemId);
         }
     });
+}
 
-    var input = $('#value-input')
-    var info = $('#info')
+function configureItemCheckboxes() {
 
-    //Handle delete buttons
-    info.click(function (event) {
-        var elem = $(event.target);
-        if (elem.is('button')) {
-            var itemDiv = elem.parent();
-            var itemId = itemDiv.attr('id').split('-')[1];
-            itemDiv.remove()
-            deleteItem(itemId);
-        }
-    })
+    const info = document.getElementById('info');
 
-    //Handle items checkboxs
-    info.change(function (event) {
+    info.addEventListener('change', async function (event) {
 
-        //Get page elements for item
-        var checkbox = $(event.target);
-        var itemDiv = checkbox.parent();
-        var textSpan = itemDiv.find('span');
+        var elem = event.target;
 
-        //Read item info from elements
-        var itemDescription = textSpan.text();
-        var itemChecked = checkbox.prop('checked');
-        var itemId = itemDiv.attr('id').split('-')[1];
+        const itemDiv = elem.parentElement;
+        var itemId = itemDiv.id.split('-')[1];
+
+        var textSpan = itemDiv.querySelector('span');
+
+        //Read item info from DOM elements
+        var itemDescription = textSpan.textContent;
+        var itemChecked = elem.checked;
 
         //Create updated item
         var updatedItem = {
             id: itemId,
             description: itemDescription,
             checked: itemChecked
-        }
+        };
 
         //Update item in server
-        updateItem(updatedItem);
+        await updateItem(updatedItem);
 
         //Update page when checked
         var style = itemChecked ? 'line-through' : 'none';
-        textSpan.css('text-decoration', style);
+        textSpan.style.textDecoration = style;
 
-    })
+    });
+}
 
-    //Handle add button
-    $("#add-button").click(function () {
+function configureAddItemButton() {
 
-        var value = input.val();
-        input.val('');
+    document.getElementById('add-button').addEventListener('click', async function () {
 
-        var item = {
+        const input = document.getElementById('value-input');
+        const value = input.value;
+        input.value = '';
+
+        const item = {
             description: value,
             checked: false
-        }
+        };
 
-        createItem(item, function (itemWithId) {
-            //When item with id is returned from server
-            showItem(itemWithId);
-        });
-    })
+        const itemWithId = await createItem(item);
+
+        addItemToPage(itemWithId);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+    configureDeleteButtons();
+    configureItemCheckboxes();
+    configureAddItemButton();
+
+    await addAllItemsToPage();
 })
