@@ -1,43 +1,55 @@
 package es.codeurjc.items;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Item {
 
-	private long id;
-	private String description;
-	private boolean checked;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private String description;
+    private boolean checked;
 
-	public Item(String description, boolean checked) {
-		this.description = description;
-		this.checked = checked;
-	}
+    public Item() {
+        // Default constructor required by JPA
+    }
 
-	public long getId() {
-		return id;
-	}
+    public Item(String description, boolean checked) {
+        this.description = description;
+        this.checked = checked;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public boolean getChecked() {
-		return checked;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setChecked(boolean checked) {
-		this.checked = checked;
-	}
+    public boolean getChecked() {
+        return checked;
+    }
 
-	@Override
-	public String toString() {
-		return "Item [id=" + id + ", description=" + description + ", checked=" + checked + "]";
-	}
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    @Override
+    public String toString() {
+        return "Item [id=" + id + ", description=" + description + ", checked=" + checked + "]";
+    }
 
 }
