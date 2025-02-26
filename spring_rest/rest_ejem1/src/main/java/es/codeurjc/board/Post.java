@@ -1,9 +1,18 @@
 package es.codeurjc.board;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Post {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private String user;
+
+	private String username;
 	private String title;
 	private String text;
 
@@ -11,9 +20,9 @@ public class Post {
 
 	}
 
-	public Post(String user, String title, String text) {
+	public Post(String username, String title, String text) {
 		super();
-		this.user = user;
+		this.username = username;
 		this.title = title;
 		this.text = text;
 	}
@@ -26,12 +35,12 @@ public class Post {
 		this.id = id;
 	}
 	
-	public String getUser() {
-		return user;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUsername(String user) {
+		this.username = user;
 	}
 
 	public String getTitle() {
@@ -52,7 +61,7 @@ public class Post {
 	
 	@Override
 	public String toString() {
-		return "Post [id="+id+", user=" + user + ", title=" + title + ", text=" + text + "]";
+		return "Post [id="+id+", user=" + username + ", title=" + title + ", text=" + text + "]";
 	}
 
 }
