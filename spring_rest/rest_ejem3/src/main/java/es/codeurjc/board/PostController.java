@@ -33,7 +33,7 @@ public class PostController {
 	}
 
 	@GetMapping("/")
-	public Collection<Post> getPostRepository() {
+	public Collection<Post> getPosts() {
 		return postRepository.findAll();
 	}
 
