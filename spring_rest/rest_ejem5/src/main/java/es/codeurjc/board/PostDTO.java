@@ -2,7 +2,7 @@ package es.codeurjc.board;
 
 record PostDTO(
         Long id,
-        String user,
+        String username,
         String title,
         String text) {
 }
