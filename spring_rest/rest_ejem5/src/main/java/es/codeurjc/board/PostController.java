@@ -37,8 +37,7 @@ public class PostController {
 
 	@GetMapping("/")
 	public Collection<PostDTO> getPosts() {
-		
-		//return postRepository.findAll().stream().map(this::toDTO).toList();
+	
 		return toDTOs(postRepository.findAll());
 	}
 
