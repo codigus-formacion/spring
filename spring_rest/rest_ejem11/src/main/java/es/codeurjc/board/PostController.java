@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,9 +38,9 @@ public class PostController {
 	}
 
 	@GetMapping("/")
-	public Collection<PostDTO> getPosts() {
+	public Page<PostDTO> getPosts(Pageable pageable) {
 	
-		return toDTOs(postRepository.findAll());
+		return postRepository.findAll(pageable).map(this::toDTO);
 	}
 
 	@GetMapping("/{id}")

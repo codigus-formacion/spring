@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.1.0
 info:
   title: OpenAPI definition
   version: v0
@@ -24,7 +24,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Post'
+                $ref: "#/components/schemas/PostDTO"
     put:
       tags:
       - post-controller
@@ -40,7 +40,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Post'
+              $ref: "#/components/schemas/PostDTO"
         required: true
       responses:
         "200":
@@ -48,7 +48,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Post'
+                $ref: "#/components/schemas/PostDTO"
     delete:
       tags:
       - post-controller
@@ -66,7 +66,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Post'
+                $ref: "#/components/schemas/PostDTO"
   /posts/:
     get:
       tags:
@@ -80,7 +80,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Post'
+                  $ref: "#/components/schemas/PostDTO"
     post:
       tags:
       - post-controller
@@ -89,7 +89,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Post'
+              $ref: "#/components/schemas/PostDTO"
         required: true
       responses:
         "200":
@@ -97,16 +97,16 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Post'
+                $ref: "#/components/schemas/PostDTO"
 components:
   schemas:
-    Post:
+    PostDTO:
       type: object
       properties:
         id:
           type: integer
           format: int64
-        user:
+        username:
           type: string
         title:
           type: string

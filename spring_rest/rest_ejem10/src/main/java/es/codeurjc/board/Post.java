@@ -1,9 +1,12 @@
 package es.codeurjc.board;
 
+import java.sql.Blob;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 @Entity
 public class Post {
@@ -11,10 +14,15 @@ public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	private String username;
 	private String title;
 	private String text;
+
+	private String image;
+
+	@Lob
+	private Blob imageFile;
 
 	public Post() {
 	}
@@ -66,9 +74,25 @@ public class Post {
 		this.text = text;
 	}
 
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public Blob getImageFile() {
+		return imageFile;
+	}
+
+	public void setImageFile(Blob imageFile) {
+		this.imageFile = imageFile;
+	}
+
 	@Override
 	public String toString() {
-		return "Post [id=" + id + ", user=" + username + ", title=" + title + ", text=" + text + "]";
+		return "Post [id=" + id + ", user=" + username + ", title=" + title + ", text=" + text + ", image=" + image + "]";
 	}
 
 }
