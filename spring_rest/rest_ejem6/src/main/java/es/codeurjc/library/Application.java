@@ -1,4 +1,4 @@
-package es.codeurjc.libreria;
+package es.codeurjc.library;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
