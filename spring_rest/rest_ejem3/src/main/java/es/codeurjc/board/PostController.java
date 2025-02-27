@@ -4,6 +4,7 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 import jakarta.annotation.PostConstruct;
 
@@ -30,7 +31,7 @@ public class PostController {
 		postRepository.save(new Post("Pepe", "Vendo moto", "Barata, barata"));
 		postRepository.save(new Post("Juan", "Compro coche", "Pago bien"));
 	}
-	
+
 	@GetMapping("/")
 	public Collection<Post> getPostRepository() {
 		return postRepository.findAll();
@@ -55,12 +56,15 @@ public class PostController {
 	@PutMapping("/{id}")
 	public Post replacePost(@PathVariable long id, @RequestBody Post newPost) {
 
-		postRepository.findById(id).orElseThrow();
+		if (postRepository.existsById(id)) {
 
-		newPost.setId(id);
-		postRepository.save(newPost);
-			
-		return newPost;
+			newPost.setId(id);
+			postRepository.save(newPost);
+			return newPost;
+
+		} else {
+			throw new NoSuchElementException();
+		}	
 	}
 
 	@DeleteMapping("/{id}")
@@ -69,7 +73,7 @@ public class PostController {
 		Post post = postRepository.findById(id).orElseThrow();
 
 		postRepository.deleteById(id);
-		
+
 		return post;
 	}
 }
