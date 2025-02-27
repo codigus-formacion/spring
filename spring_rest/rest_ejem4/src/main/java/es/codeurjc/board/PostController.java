@@ -2,6 +2,7 @@ package es.codeurjc.board;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.annotation.PostConstruct;
+
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 @RestController
@@ -20,23 +24,24 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 public class PostController {
 
 	@Autowired
-	private PostService posts;
+	private PostRepository postRepository;
+
+	@PostConstruct
+	public void init() {
+		postRepository.save(new Post("Pepe", "Vendo moto", "Barata, barata"));
+		postRepository.save(new Post("Juan", "Compro coche", "Pago bien"));
+	}
 
 	@GetMapping("/")
-	public Collection<PostDTO> getPosts() {
-		return posts.findAll().stream().map(this::toDTO).toList();
+	public Collection<PostDTO> getPostRepository() {
+		return postRepository.findAll().stream().map(this::toDTO).toList();
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<PostDTO> getPost(@PathVariable long id) {
+	public PostDTO getPost(@PathVariable long id) {
 
-		Post post = posts.findById(id);
+		return toDTO(postRepository.findById(id).orElseThrow());
 
-		if (post != null) {
-			return ResponseEntity.ok(toDTO(post));
-		} else {
-			return ResponseEntity.notFound().build();
-		}
 	}
 
 	@PostMapping("/")
@@ -44,7 +49,7 @@ public class PostController {
 
 		Post post = toDomain(postDTO);
 
-		posts.save(post);
+		postRepository.save(post);
 
 		URI location = fromCurrentRequest().path("/{id}").buildAndExpand(post.getId()).toUri();
 
@@ -52,41 +57,37 @@ public class PostController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<PostDTO> replacePost(@PathVariable long id, @RequestBody PostDTO newPostDTO) {
+	public PostDTO replacePost(@PathVariable long id, @RequestBody PostDTO newPostDTO) {
 
-		Post post = posts.findById(id);
-
-		if (post != null) {
+		if (postRepository.existsById(id)) {
 
 			Post newPost = toDomain(newPostDTO);
 
 			newPost.setId(id);
-			posts.save(newPost);
+			postRepository.save(newPost);
 
-			return ResponseEntity.ok(toDTO(newPost));
+			return toDTO(newPost);
+
 		} else {
-			return ResponseEntity.notFound().build();
+			throw new NoSuchElementException();
 		}
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<PostDTO> deletePost(@PathVariable long id) {
+	public PostDTO deletePost(@PathVariable long id) {
 
-		Post post = posts.findById(id);
+		Post post = postRepository.findById(id).orElseThrow();
 
-		if (post != null) {
-			posts.deleteById(id);
-			return ResponseEntity.ok(toDTO(post));
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		postRepository.deleteById(id);
+
+		return toDTO(post);
 	}
 
 	private PostDTO toDTO(Post post){
-		return new PostDTO(post.getId(), post.getUser(), post.getTitle(), post.getText());
+		return new PostDTO(post.getId(), post.getUsername(), post.getTitle(), post.getText());
 	}
 
 	private Post toDomain(PostDTO postDTO){
-		return new Post(postDTO.id(), postDTO.user(), postDTO.title(), postDTO.text());
+		return new Post(postDTO.id(), postDTO.username(), postDTO.title(), postDTO.text());
 	}
 }
