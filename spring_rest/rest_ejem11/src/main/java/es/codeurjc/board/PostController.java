@@ -1,7 +1,6 @@
 package es.codeurjc.board;
 
 import java.net.URI;
-import java.util.Collection;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +95,4 @@ public class PostController {
 		return mapper.toDomain(postDTO);
 	}
 
-	private Collection<PostDTO> toDTOs(Collection<Post> posts){
-		return mapper.toDTOs(posts);
-	}
 }
