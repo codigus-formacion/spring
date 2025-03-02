@@ -57,16 +57,16 @@ public class PostController {
 	}
 
 	@PutMapping("/{id}")
-	public PostDTO replacePost(@PathVariable long id, @RequestBody PostDTO newPostDTO) {
+	public PostDTO replacePost(@PathVariable long id, @RequestBody PostDTO updatedPostDTO) {
 
 		if (postRepository.existsById(id)) {
 
-			Post newPost = toDomain(newPostDTO);
+			Post updatedPost = toDomain(updatedPostDTO);
 
-			newPost.setId(id);
-			postRepository.save(newPost);
+			updatedPost.setId(id);
+			postRepository.save(updatedPost);
 
-			return toDTO(newPost);
+			return toDTO(updatedPost);
 
 		} else {
 			throw new NoSuchElementException();

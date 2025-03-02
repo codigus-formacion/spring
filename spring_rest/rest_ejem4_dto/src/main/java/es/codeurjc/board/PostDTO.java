@@ -1,6 +1,6 @@
 package es.codeurjc.board;
 
-record PostDTO(
+public record PostDTO(
         Long id,
         String username,
         String title,
