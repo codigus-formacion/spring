@@ -39,7 +39,7 @@ public class PostController {
 	@PostMapping("/")
 	public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO) {
 
-		postService.createPost(postDTO);
+		postDTO = postService.createPost(postDTO);
 
 		URI location = fromCurrentRequest().path("/{id}").buildAndExpand(postDTO.id()).toUri();
 
@@ -47,9 +47,9 @@ public class PostController {
 	}
 
 	@PutMapping("/{id}")
-	public PostDTO replacePost(@PathVariable long id, @RequestBody PostDTO updatedPost) {
+	public PostDTO replacePost(@PathVariable long id, @RequestBody PostDTO updatedPostDTO) {
 
-		return postService.replacePost(updatedPost);
+		return postService.replacePost(id, updatedPostDTO);
 	}
 
 	@DeleteMapping("/{id}")

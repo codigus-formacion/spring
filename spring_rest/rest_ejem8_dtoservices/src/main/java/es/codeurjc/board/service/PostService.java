@@ -38,11 +38,12 @@ public class PostService {
 		return toDTO(post);
 	}
 
-	public PostDTO replacePost(PostDTO updatedPostDTO) {
+	public PostDTO replacePost(long id, PostDTO updatedPostDTO) {
 
-		if (postRepository.existsById(updatedPostDTO.id())) {
+		if (postRepository.existsById(id)) {
 
 			Post updatedPost = toDomain(updatedPostDTO);
+			updatedPost.setId(id);
 
 			postRepository.save(updatedPost);
 
