@@ -61,14 +61,14 @@ public class PostController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Post> replacePost(@PathVariable long id, @RequestBody Post newPost) {
+	public ResponseEntity<Post> replacePost(@PathVariable long id, @RequestBody Post updatedPost) {
 
 		if (postRepository.existsById(id)) {
 
-			newPost.setId(id);
-			postRepository.save(newPost);
+			updatedPost.setId(id);
+			postRepository.save(updatedPost);
 
-			return ResponseEntity.ok(newPost);
+			return ResponseEntity.ok(updatedPost);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
