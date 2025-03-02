@@ -54,13 +54,13 @@ public class PostController {
 	}
 
 	@PutMapping("/{id}")
-	public Post replacePost(@PathVariable long id, @RequestBody Post newPost) {
+	public Post replacePost(@PathVariable long id, @RequestBody Post updatedPost) {
 
 		if (postRepository.existsById(id)) {
 
-			newPost.setId(id);
-			postRepository.save(newPost);
-			return newPost;
+			updatedPost.setId(id);
+			postRepository.save(updatedPost);
+			return updatedPost;
 
 		} else {
 			throw new NoSuchElementException();
