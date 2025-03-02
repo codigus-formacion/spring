@@ -22,18 +22,18 @@ public class SampleDataService {
     public void init() throws IOException {
         
         Post post1 = new Post("Pepe", "Vendo moto", "Barata, barata");     
-        setPostImage(post1, "/sampledata_images/post1_image.jpg");
-        post1.setImage("http://127.0.0.1:8080/posts/1/image");
-
         Post post2 = new Post("Juan", "Compro coche", "Pago bien");
 
         postRepository.save(post1);
         postRepository.save(post2);
-        
+
+        setPostImage(post1, "/sampledata_images/moto.jpg");
     }
 
     public void setPostImage(Post post, String classpathResource) throws IOException {
 		Resource image = new ClassPathResource(classpathResource);
         post.setImageFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
+        post.setImage("http://127.0.0.1:8080/posts/"+post.getId()+"/image");
+        postRepository.save(post);
 	}
 }

@@ -76,7 +76,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{ \"username\": \"Alberto\", \"title\": \"Cambio bici\", \"text\": \"MTB por flaca\"}",
+					"raw": "{ \"username\": \"Alberto\", \"title\": \"xxxxx bici\", \"text\": \"MTB por flaca\" }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -84,13 +84,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/posts/3",
+					"raw": "{{baseUrl}}/posts/1",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"posts",
-						"3"
+						"1"
 					]
 				}
 			},
@@ -125,18 +125,18 @@
 						{
 							"key": "imageFile",
 							"type": "file",
-							"src": "/home/mica/Imágenes/Macbook pro.jpeg"
+							"src": "/home/mica/git/spring/spring_rest/rest_ejem12_images/src/main/resources/sampledata_images/coche.jpg"
 						}
 					]
 				},
 				"url": {
-					"raw": "{{baseUrl}}/posts/1/image",
+					"raw": "{{baseUrl}}/posts/2/image",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"posts",
-						"1",
+						"2",
 						"image"
 					]
 				}
@@ -163,7 +163,7 @@
 			"response": []
 		},
 		{
-			"name": "DELETE Image",
+			"name": "DELETE Post Image",
 			"request": {
 				"method": "DELETE",
 				"header": [],
