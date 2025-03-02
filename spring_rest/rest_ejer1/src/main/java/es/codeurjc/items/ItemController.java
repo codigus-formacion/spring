@@ -40,34 +40,35 @@ public class ItemController {
     @GetMapping("/{id}")
     public ResponseEntity<Item> getItem(@PathVariable long id) {
 
-        Item post = itemRepository.findById(id).orElse(null);
+        Optional<Item> op = itemRepository.findById(id);
 
-        if (post != null) {
-            return ResponseEntity.ok(post);
+        if (op.isPresent()) {
+            Item item = op.get();
+            return ResponseEntity.ok(item);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping("/")
-    public ResponseEntity<Item> createItem(@RequestBody Item post) {
+    public ResponseEntity<Item> createItem(@RequestBody Item item) {
 
-        itemRepository.save(post);
+        itemRepository.save(item);
 
-        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(post.getId()).toUri();
+        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(item.getId()).toUri();
 
-        return ResponseEntity.created(location).body(post);
+        return ResponseEntity.created(location).body(item);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Item> replaceItem(@PathVariable long id, @RequestBody Item newItem) {
+    public ResponseEntity<Item> replaceItem(@PathVariable long id, @RequestBody Item updatedItem) {
 
         if (itemRepository.existsById(id)) {
 
-            newItem.setId(id);
-            itemRepository.save(newItem);
+            updatedItem.setId(id);
+            itemRepository.save(updatedItem);
 
-            return ResponseEntity.ok(newItem);
+            return ResponseEntity.ok(updatedItem);
         } else {
             return ResponseEntity.notFound().build();
         }

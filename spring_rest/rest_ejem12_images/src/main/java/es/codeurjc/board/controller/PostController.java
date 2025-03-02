@@ -82,15 +82,11 @@ public class PostController {
 
 		Resource postImage = postService.getPostImage(id);
 
-		if (postImage != null) {
+		return ResponseEntity
+				.ok()
+				.header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+				.body(postImage);
 
-			return ResponseEntity
-					.ok()
-					.header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-					.body(postImage);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
 	}
 
 	@PutMapping("/{id}/image")

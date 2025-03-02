@@ -96,6 +96,10 @@ public class PostService {
 
 		Post post = postRepository.findById(id).orElseThrow();
 
+		if(post.getImage() == null){
+			throw new NoSuchElementException();
+		}
+
 		post.setImageFile(BlobProxy.generateProxy(inputStream, size));
 
 		postRepository.save(post);
