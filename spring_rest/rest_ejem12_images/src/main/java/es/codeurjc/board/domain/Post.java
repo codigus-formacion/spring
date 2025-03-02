@@ -1,4 +1,4 @@
-package es.codeurjc.board;
+package es.codeurjc.board.domain;
 
 import java.sql.Blob;
 
@@ -14,7 +14,7 @@ public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
+	
 	private String username;
 	private String title;
 	private String text;
@@ -94,5 +94,4 @@ public class Post {
 	public String toString() {
 		return "Post [id=" + id + ", user=" + username + ", title=" + title + ", text=" + text + ", image=" + image + "]";
 	}
-
 }

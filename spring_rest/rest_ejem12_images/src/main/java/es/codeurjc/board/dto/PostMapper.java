@@ -1,7 +1,9 @@
-package es.codeurjc.board;
+package es.codeurjc.board.dto;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import es.codeurjc.board.domain.Post;
 
 import java.util.Collection;
 import java.util.List;

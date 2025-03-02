@@ -1,4 +1,4 @@
-package es.codeurjc.board;
+package es.codeurjc.board.dto;
 
 public record PostDTO(
         Long id,
