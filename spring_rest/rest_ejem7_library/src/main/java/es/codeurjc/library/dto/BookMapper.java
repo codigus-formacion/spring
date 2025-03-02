@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import es.codeurjc.library.domain.Book;
 
@@ -14,5 +15,6 @@ public interface BookMapper {
 
     List<BookBasicDTO> toDTOs(Collection<Book> books);
     
+    @Mapping(target = "authors", ignore = true)
     Book toDomain(BookBasicDTO bookDTO);
 }
