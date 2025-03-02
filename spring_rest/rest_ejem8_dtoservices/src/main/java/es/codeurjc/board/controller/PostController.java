@@ -33,7 +33,7 @@ public class PostController {
 	@GetMapping("/{id}")
 	public PostDTO getPost(@PathVariable long id) {
 
-		return getPost(id);
+		return postService.getPost(id);
 	}
 
 	@PostMapping("/")
