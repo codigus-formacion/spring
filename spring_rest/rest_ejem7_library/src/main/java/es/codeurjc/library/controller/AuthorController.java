@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.codeurjc.library.dto.AuthorWithoutBooksDTO;
+import es.codeurjc.library.dto.AuthorBasicDTO;
 import es.codeurjc.library.dto.AuthorMapper;
-import es.codeurjc.library.dto.AuthorWithBooksDTO;
+import es.codeurjc.library.dto.AuthorDTO;
 import es.codeurjc.library.repository.AuthorRepository;
 
 @RestController
@@ -23,12 +23,12 @@ public class AuthorController {
     private AuthorMapper mapper;
 
     @GetMapping("/")
-    public Collection<AuthorWithoutBooksDTO> getAllAuthors() {
+    public Collection<AuthorBasicDTO> getAllAuthors() {
         return mapper.toDTOs(authorRepository.findAll());
     }
 
     @GetMapping("/{id}")
-    public AuthorWithBooksDTO getAuthorById(@PathVariable Long id) {
+    public AuthorDTO getAuthorById(@PathVariable Long id) {
         return mapper.toDTO(authorRepository.findById(id).orElseThrow());
     }
 }

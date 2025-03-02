@@ -10,9 +10,9 @@ import es.codeurjc.library.domain.Book;
 @Mapper(componentModel = "spring")
 public interface BookMapper {
 
-    BookWithAuthorsDTO toDTO(Book book);
+    BookDTO toDTO(Book book);
 
-    List<BookWithoutAuthorsDTO> toDTOs(Collection<Book> books);
+    List<BookBasicDTO> toDTOs(Collection<Book> books);
     
-    Book toDomain(BookWithoutAuthorsDTO bookDTO);
+    Book toDomain(BookBasicDTO bookDTO);
 }

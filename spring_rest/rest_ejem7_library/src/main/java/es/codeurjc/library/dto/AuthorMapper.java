@@ -10,9 +10,9 @@ import es.codeurjc.library.domain.Author;
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
 
-    AuthorWithBooksDTO toDTO(Author author);
+    AuthorDTO toDTO(Author author);
 
-    List<AuthorWithoutBooksDTO> toDTOs(Collection<Author> authors);
+    List<AuthorBasicDTO> toDTOs(Collection<Author> authors);
 
-    Author toDomain(AuthorWithoutBooksDTO authorDTO);
+    Author toDomain(AuthorBasicDTO authorDTO);
 }
