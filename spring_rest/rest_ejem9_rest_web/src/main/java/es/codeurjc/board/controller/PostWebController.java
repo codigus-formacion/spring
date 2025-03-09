@@ -47,7 +47,7 @@ public class PostWebController {
 	}
 
 	@GetMapping("/editpost/{id}")
-	public String editBook(Model model, @PathVariable long id) {
+	public String editPost(Model model, @PathVariable long id) {
 
 		try {
 			PostDTO post = postService.getPost(id);
@@ -60,7 +60,7 @@ public class PostWebController {
 	}
 
 	@PostMapping("/editpost")
-	public String editBookProcess(Model model, PostDTO updatedPostDTO) {
+	public String editPostProcess(Model model, PostDTO updatedPostDTO) {
 
 		try {
 		
