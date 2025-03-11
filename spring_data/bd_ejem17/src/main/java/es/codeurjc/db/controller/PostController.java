@@ -46,7 +46,7 @@ public class PostController {
 		
 		model.addAttribute("posts", postRepository.findAll(page));
 
-		boolean hasPrev = page.getPageNumber() > 1;
+		boolean hasPrev = page.getPageNumber() >= 1;
     	boolean hasNext = (page.getPageNumber() * page.getPageSize()) < postRepository.count();
 
 		model.addAttribute("hasPrev", hasPrev);
