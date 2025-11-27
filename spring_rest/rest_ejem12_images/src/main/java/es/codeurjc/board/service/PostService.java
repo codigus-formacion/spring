@@ -6,11 +6,14 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-import org.hibernate.engine.jdbc.BlobProxy;
+import javax.sql.rowset.serial.SerialBlob;
+
+import org.hibernate.engine.jdbc.proxy.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+
 import es.codeurjc.board.domain.Post;
 import es.codeurjc.board.dto.PostDTO;
 import es.codeurjc.board.dto.PostMapper;
@@ -53,8 +56,7 @@ public class PostService {
 		if (oldPost.getImage() != null) {
 
 			//Set the image in the updated post
-			updatedPost.setImageFile(BlobProxy.generateProxy(oldPost.getImageFile().getBinaryStream(),
-					oldPost.getImageFile().length()));
+			updatedPost.setImageFile(new SerialBlob(oldPost.getImageFile().getBytes(1, (int) oldPost.getImageFile().length())));
 			updatedPost.setImage(oldPost.getImage());
 		}
 
