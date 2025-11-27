@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 @RestController
 public class BooksController {
@@ -30,7 +30,8 @@ public class BooksController {
 		ArrayNode items = (ArrayNode) data.get("items");
 		for (int i = 0; i < items.size(); i++) {
 			JsonNode item = items.get(i);
-			String bookTitle = item.get("volumeInfo").get("title").asText();
+			JsonNode titleNode = item.get("volumeInfo").get("title");
+			String bookTitle = titleNode != null ? titleNode.asString("") : "";
 			bookTitles.add(bookTitle);
 		}
 
