@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import es.codeurjc.board.domain.Post;
 import es.codeurjc.board.dto.PostDTO;
+import es.codeurjc.board.dto.PostMapper;
 import es.codeurjc.board.service.PostService;
 
 @Controller
@@ -17,10 +19,13 @@ public class PostWebController {
 	@Autowired
 	private PostService postService;
 
+	@Autowired
+	private PostMapper mapper;
+
 	@GetMapping("/")
 	public String showPosts(Model model) {
 
-		model.addAttribute("posts", postService.getPosts());
+		model.addAttribute("posts", mapper.toDTOs(postService.getPosts()));
 
 		return "index";
 	}
@@ -29,8 +34,8 @@ public class PostWebController {
 	public String showPost(Model model, @PathVariable long id) {
 
 		try {
-			PostDTO post = postService.getPost(id);
-			model.addAttribute("post", post);
+			Post post = postService.getPost(id);
+			model.addAttribute("post", mapper.toDTO(post));
 			return "show_post";	
 
 		} catch (NoSuchElementException e){
@@ -41,7 +46,8 @@ public class PostWebController {
 	@PostMapping("/post/new")
 	public String newPost(Model model, PostDTO postDTO) {
 
-		postService.createPost(postDTO);
+		Post post = mapper.toDomain(postDTO);
+		postService.createPost(post);
 
 		return "saved_post";
 	}
@@ -50,8 +56,8 @@ public class PostWebController {
 	public String editPost(Model model, @PathVariable long id) {
 
 		try {
-			PostDTO post = postService.getPost(id);
-			model.addAttribute("post", post);
+			Post post = postService.getPost(id);
+			model.addAttribute("post", mapper.toDTO(post));
 			return "edit_post_page";	
 
 		} catch (NoSuchElementException e){
@@ -63,8 +69,8 @@ public class PostWebController {
 	public String editPostProcess(Model model, PostDTO updatedPostDTO) {
 
 		try {
-		
-			postService.replacePost(updatedPostDTO.id(), updatedPostDTO);
+			Post updatedPost = mapper.toDomain(updatedPostDTO);
+			postService.replacePost(updatedPostDTO.id(), updatedPost);
 			model.addAttribute("post", updatedPostDTO);
 			return "edited_post";
 

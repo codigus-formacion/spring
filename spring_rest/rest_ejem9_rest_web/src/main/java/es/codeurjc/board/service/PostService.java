@@ -6,8 +6,6 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import es.codeurjc.board.domain.Post;
-import es.codeurjc.board.dto.PostDTO;
-import es.codeurjc.board.dto.PostMapper;
 import es.codeurjc.board.repository.PostRepository;
 
 @Service
@@ -16,63 +14,45 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
-    @Autowired
-    private PostMapper mapper;
+	public Collection<Post> getPosts() {
 
-	public Collection<PostDTO> getPosts() {
-
-		return toDTOs(postRepository.findAll());
+		return postRepository.findAll();
 	}
 
-	public PostDTO getPost(long id) {
+	public Post getPost(long id) {
 
-		return toDTO(postRepository.findById(id).orElseThrow());
+		return postRepository.findById(id).orElseThrow();
 	}
 
-	public PostDTO createPost(PostDTO postDTO) {
-
-		Post post = toDomain(postDTO);
+	public Post createPost(Post post) {
 
 		postRepository.save(post);
 
-		return toDTO(post);
+		return post;
 	}
 
-	public PostDTO replacePost(long id, PostDTO updatedPostDTO) {
+	public Post replacePost(long id, Post updatedPost) {
 
 		if (postRepository.existsById(id)) {
 
-			Post updatedPost = toDomain(updatedPostDTO);
 			updatedPost.setId(id);
 
 			postRepository.save(updatedPost);
 
-			return toDTO(updatedPost);
+			return updatedPost;
 
 		} else {
 			throw new NoSuchElementException();
 		}
 	}
 
-	public PostDTO deletePost(long id) {
+	public Post deletePost(long id) {
 
 		Post post = postRepository.findById(id).orElseThrow();
 
 		postRepository.deleteById(id);
 
-		return toDTO(post);
-	}
-
-	private PostDTO toDTO(Post post){
-		return mapper.toDTO(post);
-	}
-
-	private Post toDomain(PostDTO postDTO){
-		return mapper.toDomain(postDTO);
-	}
-
-	private Collection<PostDTO> toDTOs(Collection<Post> posts){
-		return mapper.toDTOs(posts);
+		return post;
 	}
 
 }
