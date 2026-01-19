@@ -4,6 +4,5 @@ public record PostDTO(
         Long id,
         String username,
         String title,
-        String text,
-        String image) {
+        String text) {
 }

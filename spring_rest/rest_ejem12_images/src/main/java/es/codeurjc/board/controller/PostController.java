@@ -2,12 +2,10 @@ package es.codeurjc.board.controller;
 
 import java.io.IOException;
 import java.net.URI;
-import java.sql.SQLException;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import es.codeurjc.board.domain.Image;
+import es.codeurjc.board.domain.Post;
+import es.codeurjc.board.dto.ImageDTO;
+import es.codeurjc.board.dto.ImageMapper;
 import es.codeurjc.board.dto.PostDTO;
+import es.codeurjc.board.dto.PostMapper;
+import es.codeurjc.board.service.ImageService;
 import es.codeurjc.board.service.PostService;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
 
 @RestController
 @RequestMapping("/posts")
@@ -31,22 +36,31 @@ public class PostController {
 	@Autowired
 	private PostService postService;
 
+	@Autowired
+	private PostMapper postMapper;
+
+	@Autowired
+	private ImageService imageService;
+
+	@Autowired
+	private ImageMapper imageMapper;
+
 	@GetMapping("/")
 	public Collection<PostDTO> getPosts() {
 
-		return postService.getPosts();
+		return postMapper.toDTOs(postService.getPosts());
 	}
 
 	@GetMapping("/{id}")
 	public PostDTO getPost(@PathVariable long id) {
 
-		return postService.getPost(id);
+		return postMapper.toDTO(postService.getPost(id));
 	}
 
 	@PostMapping("/")
 	public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO) {
 
-		postDTO = postService.createPost(postDTO);
+		postDTO = postMapper.toDTO(postService.createPost(postMapper.toDomain(postDTO)));
 
 		URI location = fromCurrentRequest().path("/{id}").buildAndExpand(postDTO.id()).toUri();
 
@@ -54,55 +68,51 @@ public class PostController {
 	}
 
 	@PutMapping("/{id}")
-	public PostDTO replacePost(@PathVariable long id, @RequestBody PostDTO updatedPostDTO) throws SQLException {
+	public PostDTO replacePost(@PathVariable long id, @RequestBody PostDTO updatedPostDTO) {
 
-		return postService.replacePost(id, updatedPostDTO);
+		return postMapper.toDTO(postService.replacePost(id, postMapper.toDomain(updatedPostDTO)));
 	}
 
 	@DeleteMapping("/{id}")
 	public PostDTO deletePost(@PathVariable long id) {
 
-		return postService.deletePost(id);
+		return postMapper.toDTO(postService.deletePost(id));
 	}
 
-	@PostMapping("/{id}/image")
-	public ResponseEntity<Object> createPostImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
+	@GetMapping("/{id}/images/")
+	public List<ImageDTO> getImages(@PathVariable long id) {
+		Post post = postService.getPost(id);
+
+		return imageMapper.toDTOs(post.getImages());
+	}
+
+	@PostMapping("/{id}/images/")
+	public ResponseEntity<ImageDTO> createImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
 			throws IOException {
 
-		URI location = fromCurrentRequest().build().toUri();
+		if (imageFile.isEmpty()) {
+			throw new IllegalArgumentException("Image file cannot be empty");
+		}
 
-		postService.createPostImage(id, location, imageFile.getInputStream(), imageFile.getSize());
+		Image image = imageService.createImage(imageFile.getInputStream());
+		postService.addImageToPost(id, image);
 
-		return ResponseEntity.created(location).build();
+		URI location = fromCurrentContextPath()
+				.path("/images/{imageId}/media")
+				.buildAndExpand(image.getId())
+				.toUri();
 
+		return ResponseEntity.created(location).body(imageMapper.toDTO(image));
 	}
 
-	@GetMapping("/{id}/image")
-	public ResponseEntity<Object> getPostImage(@PathVariable long id) throws SQLException, IOException {
-
-		Resource postImage = postService.getPostImage(id);
-
-		return ResponseEntity
-				.ok()
-				.header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-				.body(postImage);
-
-	}
-
-	@PutMapping("/{id}/image")
-	public ResponseEntity<Object> replacePostImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
+	@DeleteMapping("/{postId}/images/{imageId}")
+	public ImageDTO deleteImage(@PathVariable long postId, @PathVariable long imageId)
 			throws IOException {
 
-		postService.replacePostImage(id, imageFile.getInputStream(), imageFile.getSize());
+		Image image = imageService.getImage(imageId);
+		postService.removeImagePost(postId, image);
+		imageService.deleteImage(imageId);
 
-		return ResponseEntity.noContent().build();
-	}
-
-	@DeleteMapping("/{id}/image")
-	public ResponseEntity<Object> deletePostImage(@PathVariable long id) throws IOException {
-
-		postService.deletePostImage(id);
-
-		return ResponseEntity.noContent().build();
+		return imageMapper.toDTO(image);
 	}
 }

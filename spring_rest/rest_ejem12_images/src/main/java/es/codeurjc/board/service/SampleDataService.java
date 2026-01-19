@@ -1,19 +1,17 @@
 package es.codeurjc.board.service;
 
 import java.io.IOException;
-import java.sql.SQLException;
-
-import javax.sql.rowset.serial.SerialBlob;
-import javax.sql.rowset.serial.SerialException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import es.codeurjc.board.domain.Image;
 import es.codeurjc.board.domain.Post;
 import es.codeurjc.board.repository.PostRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 
 @Service
 public class SampleDataService {
@@ -21,10 +19,17 @@ public class SampleDataService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private ImageService imageService;
+
     @PostConstruct
     public void init() throws Exception {
-        
-        Post post1 = new Post("Pepe", "Vendo moto", "Barata, barata");     
+        loadSampleData();
+    }
+
+    @Transactional
+    public void loadSampleData() throws IOException {
+        Post post1 = new Post("Pepe", "Vendo moto", "Barata, barata");
         Post post2 = new Post("Juan", "Compro coche", "Pago bien");
 
         postRepository.save(post1);
@@ -33,10 +38,11 @@ public class SampleDataService {
         setPostImage(post1, "/sampledata_images/moto.jpg");
     }
 
-    public void setPostImage(Post post, String classpathResource) throws IOException, SerialException, SQLException {
-		Resource image = new ClassPathResource(classpathResource);
-        post.setImageFile(new SerialBlob(image.getInputStream().readAllBytes()));
-        post.setImage("http://127.0.0.1:8080/posts/"+post.getId()+"/image");
+    public void setPostImage(Post post, String classpathResource) throws IOException {
+        Resource image = new ClassPathResource(classpathResource);
+
+        Image createdImage = imageService.createImage(image.getInputStream());
+        post.getImages().add(createdImage);
         postRepository.save(post);
-	}
+    }
 }

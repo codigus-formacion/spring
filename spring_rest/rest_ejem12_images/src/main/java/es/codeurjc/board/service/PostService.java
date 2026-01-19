@@ -1,22 +1,12 @@
 package es.codeurjc.board.service;
 
-import java.io.InputStream;
-import java.net.URI;
-import java.sql.SQLException;
 import java.util.Collection;
-import java.util.NoSuchElementException;
 
-import javax.sql.rowset.serial.SerialBlob;
-
-import org.hibernate.engine.jdbc.proxy.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import es.codeurjc.board.domain.Image;
 import es.codeurjc.board.domain.Post;
-import es.codeurjc.board.dto.PostDTO;
-import es.codeurjc.board.dto.PostMapper;
 import es.codeurjc.board.repository.PostRepository;
 
 @Service
@@ -25,111 +15,56 @@ public class PostService {
 	@Autowired
 	private PostRepository postRepository;
 
-	@Autowired
-	private PostMapper mapper;
+	public Collection<Post> getPosts() {
 
-	public Collection<PostDTO> getPosts() {
-
-		return toDTOs(postRepository.findAll());
+		return postRepository.findAll();
 	}
 
-	public PostDTO getPost(long id) {
+	public Post getPost(long id) {
 
-		return toDTO(postRepository.findById(id).orElseThrow());
+		return postRepository.findById(id).orElseThrow();
 	}
 
-	public PostDTO createPost(PostDTO postDTO) {
-
-		Post post = toDomain(postDTO);
+	public Post createPost(Post post) {
 
 		postRepository.save(post);
 
-		return toDTO(post);
+		return post;
 	}
 
-	public PostDTO replacePost(long id, PostDTO updatedPostDTO) throws SQLException {
+	public Post replacePost(long id, Post updatedPost) {
+		Post post = postRepository.findById(id).orElseThrow();
 
-		Post oldPost = postRepository.findById(id).orElseThrow();
-		Post updatedPost = toDomain(updatedPostDTO);
 		updatedPost.setId(id);
-
-		if (oldPost.getImage() != null) {
-
-			//Set the image in the updated post
-			updatedPost.setImageFile(new SerialBlob(oldPost.getImageFile().getBytes(1, (int) oldPost.getImageFile().length())));
-			updatedPost.setImage(oldPost.getImage());
-		}
+		updatedPost.setImages(post.getImages());
 
 		postRepository.save(updatedPost);
 
-		return toDTO(updatedPost);
+		return updatedPost;
 	}
 
-	public PostDTO deletePost(long id) {
+	public Post deletePost(long id) {
 
 		Post post = postRepository.findById(id).orElseThrow();
 
 		postRepository.deleteById(id);
 
-		return toDTO(post);
+		return post;
 	}
 
-	public void createPostImage(long id, URI location, InputStream inputStream, long size) {
-
+	public Post addImageToPost(long id, Image image) {
 		Post post = postRepository.findById(id).orElseThrow();
-
-		post.setImage(location.toString());
-		post.setImageFile(BlobProxy.generateProxy(inputStream, size));
+		post.getImages().add(image);
 		postRepository.save(post);
+
+		return post;
 	}
 
-	public Resource getPostImage(long id) throws SQLException {
-
-		Post post = postRepository.findById(id).orElseThrow();
-
-		if (post.getImageFile() != null) {
-			return new InputStreamResource(post.getImageFile().getBinaryStream());
-		} else {
-			throw new NoSuchElementException();
-		}
-	}
-
-	public void replacePostImage(long id, InputStream inputStream, long size) {
-
-		Post post = postRepository.findById(id).orElseThrow();
-
-		if(post.getImage() == null){
-			throw new NoSuchElementException();
-		}
-
-		post.setImageFile(BlobProxy.generateProxy(inputStream, size));
-
+	public Post removeImagePost(long postId, Image image) {
+		Post post = postRepository.findById(postId).orElseThrow();
+		post.getImages().remove(image);
 		postRepository.save(post);
-	}
 
-	public void deletePostImage(long id) {
-
-		Post post = postRepository.findById(id).orElseThrow();
-
-		if(post.getImage() == null){
-			throw new NoSuchElementException();
-		}
-
-		post.setImageFile(null);
-		post.setImage(null);
-
-		postRepository.save(post);
-	}
-
-	private PostDTO toDTO(Post post) {
-		return mapper.toDTO(post);
-	}
-
-	private Post toDomain(PostDTO postDTO) {
-		return mapper.toDomain(postDTO);
-	}
-
-	private Collection<PostDTO> toDTOs(Collection<Post> posts) {
-		return mapper.toDTOs(posts);
+		return post;
 	}
 }

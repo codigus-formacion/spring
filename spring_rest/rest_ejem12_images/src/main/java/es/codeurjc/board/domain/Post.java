@@ -1,12 +1,14 @@
 package es.codeurjc.board.domain;
 
-import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Post {
@@ -19,10 +21,8 @@ public class Post {
 	private String title;
 	private String text;
 
-	private String image;
-
-	@Lob
-	private Blob imageFile;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Image> images = new ArrayList<>();
 
 	public Post() {
 	}
@@ -74,24 +74,16 @@ public class Post {
 		this.text = text;
 	}
 
-	public String getImage() {
-		return image;
+	public List<Image> getImages() {
+		return images;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public Blob getImageFile() {
-		return imageFile;
-	}
-
-	public void setImageFile(Blob imageFile) {
-		this.imageFile = imageFile;
+	public void setImages(List<Image> images) {
+		this.images = images;
 	}
 
 	@Override
 	public String toString() {
-		return "Post [id=" + id + ", user=" + username + ", title=" + title + ", text=" + text + ", image=" + image + "]";
+		return "Post [id=" + id + ", user=" + username + ", title=" + title + ", text=" + text + "]";
 	}
 }
