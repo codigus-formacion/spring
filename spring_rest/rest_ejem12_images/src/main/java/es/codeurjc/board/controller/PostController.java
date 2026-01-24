@@ -79,13 +79,6 @@ public class PostController {
 		return postMapper.toDTO(postService.deletePost(id));
 	}
 
-	@GetMapping("/{id}/images/")
-	public List<ImageDTO> getPostImages(@PathVariable long id) {
-		Post post = postService.getPost(id);
-
-		return imageMapper.toDTOs(post.getImages());
-	}
-
 	@PostMapping("/{id}/images/")
 	public ResponseEntity<ImageDTO> createPostImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
 			throws IOException {

@@ -116,26 +116,6 @@
 			"response": []
 		},
 		{
-			"name": "GET Post Images",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUrl}}/posts/1/images/",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"posts",
-						"1",
-						"images",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "CREATE Image",
 			"request": {
 				"method": "POST",
