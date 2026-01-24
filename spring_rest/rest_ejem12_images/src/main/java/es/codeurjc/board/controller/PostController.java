@@ -80,14 +80,14 @@ public class PostController {
 	}
 
 	@GetMapping("/{id}/images/")
-	public List<ImageDTO> getImages(@PathVariable long id) {
+	public List<ImageDTO> getPostImages(@PathVariable long id) {
 		Post post = postService.getPost(id);
 
 		return imageMapper.toDTOs(post.getImages());
 	}
 
 	@PostMapping("/{id}/images/")
-	public ResponseEntity<ImageDTO> createImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
+	public ResponseEntity<ImageDTO> createPostImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
 			throws IOException {
 
 		if (imageFile.isEmpty()) {
@@ -106,7 +106,7 @@ public class PostController {
 	}
 
 	@DeleteMapping("/{postId}/images/{imageId}")
-	public ImageDTO deleteImage(@PathVariable long postId, @PathVariable long imageId)
+	public ImageDTO deletePostImage(@PathVariable long postId, @PathVariable long imageId)
 			throws IOException {
 
 		Image image = imageService.getImage(imageId);

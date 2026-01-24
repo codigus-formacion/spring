@@ -8,7 +8,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -58,10 +57,5 @@ public class ImageController {
 
 		imageService.replaceImageFile(id, imageFile.getInputStream());
 		return ResponseEntity.noContent().build();
-	}
-
-	@DeleteMapping("/{id}")
-	public ImageDTO deleteImage(@PathVariable long id) {
-		return mapper.toDTO(imageService.deleteImage(id));
 	}
 }
