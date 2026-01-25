@@ -41,10 +41,10 @@ public class PostController {
 
 		postService.save(post);
 
-		Image imageOne = imageService.createImage(imageOneFile.getInputStream());
+		Image imageOne = imageService.createImage(imageOneFile);
 		postService.addImageToPost(post.getId(), imageOne);
 
-		Image imageTwo = imageService.createImage(imageTwoFile.getInputStream());
+		Image imageTwo = imageService.createImage(imageTwoFile);
 		postService.addImageToPost(post.getId(), imageTwo);
 
 		return "saved_post";

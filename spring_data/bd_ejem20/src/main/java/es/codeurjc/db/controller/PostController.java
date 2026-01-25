@@ -7,7 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +32,7 @@ public class PostController {
 	private CommentService commentService;
 
 	@GetMapping("/")
-	public String getPosts(Model model){
+	public String getPosts(Model model) {
 		model.addAttribute("posts", postService.findAll());
 		return "index";
 	}
@@ -62,13 +63,18 @@ public class PostController {
 		Optional<Post> op = postService.findById(id);
 
 		if (op.isPresent() && op.get().getImageFile() != null) {
-			
+
 			Blob image = op.get().getImageFile();
-			Resource file = new InputStreamResource(image.getBinaryStream());
+			Resource imageFile = new InputStreamResource(image.getBinaryStream());
 
-			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-					.contentLength(image.length()).body(file);
+			MediaType mediaType = MediaTypeFactory
+					.getMediaType(imageFile)
+					.orElse(MediaType.IMAGE_JPEG);
 
+			return ResponseEntity
+					.ok()
+					.contentType(mediaType)
+					.body(imageFile);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
