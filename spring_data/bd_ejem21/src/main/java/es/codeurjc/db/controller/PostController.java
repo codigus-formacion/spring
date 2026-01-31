@@ -41,11 +41,15 @@ public class PostController {
 
 		postService.save(post);
 
-		Image imageOne = imageService.createImage(imageOneFile);
-		postService.addImageToPost(post.getId(), imageOne);
+		if (!imageOneFile.isEmpty()) {
+			Image imageOne = imageService.createImage(imageOneFile);
+			postService.addImageToPost(post.getId(), imageOne);
+		}
 
-		Image imageTwo = imageService.createImage(imageTwoFile);
-		postService.addImageToPost(post.getId(), imageTwo);
+		if (!imageTwoFile.isEmpty()) {
+			Image imageTwo = imageService.createImage(imageTwoFile);
+			postService.addImageToPost(post.getId(), imageTwo);
+		}
 
 		return "saved_post";
 	}
@@ -55,7 +59,7 @@ public class PostController {
 		Optional<Post> post = postService.findById(id);
 		if (post.isPresent()) {
 			model.addAttribute("post", post.get());
-			model.addAttribute("hasImage", !post.get().getImages().isEmpty());
+			model.addAttribute("hasImages", !post.get().getImages().isEmpty());
 			return "show_post";
 		} else {
 			return "post_not_found";

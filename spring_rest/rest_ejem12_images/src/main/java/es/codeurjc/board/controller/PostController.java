@@ -3,7 +3,6 @@ package es.codeurjc.board.controller;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.codeurjc.board.domain.Image;
-import es.codeurjc.board.domain.Post;
 import es.codeurjc.board.dto.ImageDTO;
 import es.codeurjc.board.dto.ImageMapper;
 import es.codeurjc.board.dto.PostDTO;

@@ -5,16 +5,16 @@
 	<p>Title: {{post.title}}</p>
 	<p>Text: {{post.text}}</p>
 
-	{{#hasImage}}
+	{{#hasImages}}
 		{{#post.images}}
             <p>Image {{id}}</p>
 			<img src="/images/{{id}}"></img>
 		{{/post.images}}
-	{{/hasImage}}
+	{{/hasImages}}
 
-	{{^hasImage}}
+	{{^hasImages}}
 		<img src="/no-image.png"></img>
-	{{/hasImage}}
+	{{/hasImages}}
 	
 	
 	<h2>Comments</h2>
