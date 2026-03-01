@@ -10,11 +10,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PostMapper {
-
+    
     PostDTO toDTO(Post post);
 
     List<PostDTO> toDTOs(Collection<Post> posts);
 
-    @Mapping(target = "imageFile", ignore = true)
+    @Mapping(target = "images", ignore = true)
     Post toDomain(PostDTO postDTO);
 }

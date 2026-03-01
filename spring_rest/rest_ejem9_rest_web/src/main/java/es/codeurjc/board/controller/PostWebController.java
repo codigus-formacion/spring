@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import es.codeurjc.board.dto.PostDTO;
+import es.codeurjc.board.domain.Post;
 import es.codeurjc.board.service.PostService;
 
 @Controller
@@ -29,7 +29,7 @@ public class PostWebController {
 	public String showPost(Model model, @PathVariable long id) {
 
 		try {
-			PostDTO post = postService.getPost(id);
+			Post post = postService.getPost(id);
 			model.addAttribute("post", post);
 			return "show_post";	
 
@@ -39,9 +39,9 @@ public class PostWebController {
 	}
 
 	@PostMapping("/post/new")
-	public String newPost(Model model, PostDTO postDTO) {
+	public String newPost(Model model, Post post) {
 
-		postService.createPost(postDTO);
+		postService.createPost(post);
 
 		return "saved_post";
 	}
@@ -50,7 +50,7 @@ public class PostWebController {
 	public String editPost(Model model, @PathVariable long id) {
 
 		try {
-			PostDTO post = postService.getPost(id);
+			Post post = postService.getPost(id);
 			model.addAttribute("post", post);
 			return "edit_post_page";	
 
@@ -60,12 +60,11 @@ public class PostWebController {
 	}
 
 	@PostMapping("/editpost")
-	public String editPostProcess(Model model, PostDTO updatedPostDTO) {
+	public String editPostProcess(Model model, Post updatedPost) {
 
 		try {
-		
-			postService.replacePost(updatedPostDTO.id(), updatedPostDTO);
-			model.addAttribute("post", updatedPostDTO);
+			postService.replacePost(updatedPost.getId(), updatedPost);
+			model.addAttribute("post", updatedPost);
 			return "edited_post";
 
 		} catch (NoSuchElementException e){

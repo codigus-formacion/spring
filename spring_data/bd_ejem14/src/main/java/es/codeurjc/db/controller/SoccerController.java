@@ -43,11 +43,11 @@ public class SoccerController {
 		Tournament tournament = new Tournament("La Liga");
 		tournamentRepository.save(tournament);
 		
-		Match m1 = new Match("El clasico");
+		Match m1 = new Match("El clásico");
 		m1.setTeam1(t1);
 		m1.setTeam2(t2);
 		
-		Match m2 = new Match("Atletico - Barça");
+		Match m2 = new Match("Atlético - Barça");
 		m2.setTeam1(t2);
 		m2.setTeam2(t3);
 		

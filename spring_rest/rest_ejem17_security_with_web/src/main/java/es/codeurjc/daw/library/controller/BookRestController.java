@@ -67,13 +67,13 @@ public class BookRestController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Book> deleteBook(@PathVariable long id) {
+	public ResponseEntity<Void> deleteBook(@PathVariable long id) {
 
 		if(service.exist(id)) {
 			service.delete(id);
-			return new ResponseEntity<>(null, HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 }

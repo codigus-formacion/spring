@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.engine.jdbc.BlobProxy;
+import javax.sql.rowset.serial.SerialBlob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +24,11 @@ public class PostService {
 
 	public void save(Post post, MultipartFile imageFile) throws IOException{
 		if(!imageFile.isEmpty()) {
-			post.setImageFile(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
+			try {
+				post.setImageFile(new SerialBlob(imageFile.getBytes()));
+			} catch (Exception e) {
+				throw new IOException("Failed to create image blob", e);
+			}
 		}
 		this.save(post);
 	}

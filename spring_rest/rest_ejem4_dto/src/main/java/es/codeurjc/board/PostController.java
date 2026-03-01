@@ -2,6 +2,7 @@ package es.codeurjc.board;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class PostController {
 	@GetMapping("/")
 	public Collection<PostDTO> getPosts() {
 		
-		return postRepository.findAll().stream().map(this::toDTO).toList();
+		return toDTOs(postRepository.findAll());
 	}
 
 	@GetMapping("/{id}")
@@ -85,6 +86,10 @@ public class PostController {
 
 	private PostDTO toDTO(Post post){
 		return new PostDTO(post.getId(), post.getUsername(), post.getTitle(), post.getText());
+	}
+
+	private List<PostDTO> toDTOs(Collection<Post> posts) {
+		return posts.stream().map(this::toDTO).toList();
 	}
 
 	private Post toDomain(PostDTO postDTO){

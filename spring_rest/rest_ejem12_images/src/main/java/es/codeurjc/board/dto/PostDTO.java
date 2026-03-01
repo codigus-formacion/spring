@@ -1,9 +1,11 @@
 package es.codeurjc.board.dto;
 
+import java.util.List;
+
 public record PostDTO(
         Long id,
         String username,
         String title,
         String text,
-        String image) {
+        List<ImageDTO> images) {
 }

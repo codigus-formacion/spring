@@ -68,14 +68,13 @@ public class BookRestController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Book> deleteBook(@PathVariable long id) {
+	public ResponseEntity<Void> deleteBook(@PathVariable long id) {
 
 		try {
 			service.delete(id);
-			return new ResponseEntity<>(null, HttpStatus.OK);
-
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (EmptyResultDataAccessException e) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 }
