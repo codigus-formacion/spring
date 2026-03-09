@@ -41,4 +41,10 @@ public class PostService {
 		return post;
 	}
 
+	public void removeImageFromPost(long postId, long imageId) {
+		Post post = postRepository.findById(postId).orElseThrow();
+		post.getImages().removeIf(image -> image.getId().equals(imageId));
+		postRepository.save(post);
+	}
+
 }

@@ -93,4 +93,10 @@ public class PostController {
 		return "redirect:/posts/" + postId;
 	}
 
+	@PostMapping("/posts/{postId}/images/{imageId}/delete")
+	public String deleteImage(@PathVariable Long postId, @PathVariable Long imageId) {
+		postService.removeImageFromPost(postId, imageId);
+		return "redirect:/posts/" + postId;
+	}
+
 }

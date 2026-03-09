@@ -9,6 +9,10 @@
 		{{#post.images}}
             <p>Image {{id}}</p>
 			<img src="/images/{{id}}"></img>
+			<form action="/posts/{{post.id}}/images/{{id}}/delete" method="post" style="display: inline;">
+				<input type='submit' value='Delete image'/>
+			</form>
+			<br><br>
 		{{/post.images}}
 	{{/hasImages}}
 
